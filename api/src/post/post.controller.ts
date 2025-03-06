@@ -142,8 +142,7 @@ export class PostController {
         @Res() response: Response
     ): Promise<Response> {
         try {
-            const reactions = this.reactionService.getReactionsByPostId(postId);
-
+            const reactions = await this.reactionService.getReactionsByPostId(postId);
             return response
                 .status(HttpStatus.OK)
                 .json(reactions);

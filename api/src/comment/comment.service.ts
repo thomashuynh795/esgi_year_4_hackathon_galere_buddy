@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { CreateCommentDto } from "./dto/create-comment.dto";
 import { Comment } from "@prisma/client";
@@ -42,7 +42,7 @@ export class CommentService {
 
       return comment;
     } catch (error: any) {
-      throw new InternalServerErrorException("Failed to create comment.");
+      throw error;
     }
   }
 
@@ -54,13 +54,9 @@ export class CommentService {
         }
       });
 
-      if (!comments || comments.length === 0) {
-        throw new BadRequestException("No comments found for this post.");
-      }
-
       return comments;
     } catch (error: any) {
-      throw new InternalServerErrorException("Failed to get comments of this post.");
+      throw error;
     }
   }
 
@@ -72,13 +68,9 @@ export class CommentService {
         }
       });
 
-      if (!comments || comments.length === 0) {
-        throw new BadRequestException("No comments found for this user.");
-      }
-
       return comments;
     } catch (error: any) {
-      throw new InternalServerErrorException("Failed to get comments of this user.");
+      throw error;
     }
   }
 
@@ -101,7 +93,7 @@ export class CommentService {
 
       return updatedComment;
     } catch (error: any) {
-      throw new InternalServerErrorException("Failed to edit the comment.");
+      throw error;
     }
   }
 
@@ -120,7 +112,7 @@ export class CommentService {
       });
 
     } catch (error: any) {
-      throw new InternalServerErrorException("Failed to delete the comment.");
+      throw error;
     }
   }
 }
