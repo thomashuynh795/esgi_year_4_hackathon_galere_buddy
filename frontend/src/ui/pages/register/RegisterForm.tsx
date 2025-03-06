@@ -6,12 +6,13 @@ import SecondRegisterForm from "./SecondRegisterForm";
 export default function RegisterForm() {
   const [step, setStep] = useState(1);
 
-   const [formData, setFormData] = useState({
-    nom: "",
-    prenom: "",
+  // ✅ État contenant les données du formulaire
+  const [formData, setFormData] = useState({
+    lastName: "",
+    firstName: "",
     email: "",
     password: "",
-    profilePicture:"/img/profilePicture.png"
+    profilePicture: "/img/profilePicture.png",
   });
 
   return (
@@ -25,14 +26,21 @@ export default function RegisterForm() {
         <form className="mt-5 p-5 border border-gray-300 rounded-md">
           <p className="text-center">Je crée mon profil en quelques étapes</p>
 
-           {step === 1 && (
+          {step === 1 && (
             <FirstRegisterForm
               onSuccess={() => setStep(2)}
               formData={formData}
               setFormData={setFormData}
             />
           )}
-          {step === 2 && <SecondRegisterForm goBack={() => setStep(1)} />}
+
+          {step === 2 && (
+            <SecondRegisterForm
+              goBack={() => setStep(1)}
+              formData={formData} // ✅ Passage du formulaire ici
+              setFormData={setFormData}
+            />
+          )}
 
           <p className="text-center">Me créer un compte</p>
         </form>

@@ -7,10 +7,28 @@ import AvatarSelector from "./AvatarSelector";
 
 interface SecondRegisterFormProps {
   goBack: () => void;
+  formData: {
+    lastName: string;
+    firstName: string;
+    email: string;
+    password: string;
+    profilePicture: string;
+  };
+  setFormData: React.Dispatch<
+    React.SetStateAction<{
+      lastName: string;
+      firstName: string;
+      email: string;
+      password: string;
+      profilePicture: string;
+    }>
+  >;
 }
 
 export default function SecondRegisterForm({
   goBack,
+  formData,
+  setFormData,
 }: SecondRegisterFormProps) {
   return (
     <>
@@ -18,7 +36,7 @@ export default function SecondRegisterForm({
         <p className="text-center">Mon avatar</p>
         <div className="rounded-full border border-gray-300 w-30 overflow-hidden self-center">
           <img
-            src="/img/profilePicture.png"
+            src={formData.profilePicture} // ✅ Utilisation de `formData`
             alt="avatar picture"
             className="self-center"
           />
@@ -33,7 +51,7 @@ export default function SecondRegisterForm({
             />
           </Drawer.Trigger>
 
-           <AvatarSelector />
+          <AvatarSelector />
 
           <Drawer.Cancel label="Annuler" />
           <Drawer.Action>
@@ -41,7 +59,7 @@ export default function SecondRegisterForm({
           </Drawer.Action>
         </Drawer.Root>
 
-         <Button
+        <Button
           className="py-3 mt-5"
           label={"Retour"}
           variant="outline"
