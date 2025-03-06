@@ -1,4 +1,4 @@
-import { Body, Controller, HttpStatus, Param, Put, Res, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, HttpStatus, Param, Put, Res, UseGuards } from "@nestjs/common";
 import { CommentService } from "./comment.service";
 import { ErrorHandlerService } from "src/common/utils/error-handler/error-handler.service";
 import { Response } from "express";
@@ -25,6 +25,26 @@ export class CommentController {
             return response
                 .status(HttpStatus.OK)
                 .json(editedComment);
+        } catch (error: any) {
+            return this.errorHandlerService
+            .getErrorForControllerLayer(
+                error,
+                response
+            );
+        }
+    }
+
+    @UseGuards(CommentGuard)
+    @Delete(":id")
+    public async deleteComment(
+        @Param("id") commentId: string,
+        @Res() response: Response
+    ): Promise<Response> {
+        try {
+           await this.commentService.deleteComment(commentId);
+           
+           return response
+                .status(HttpStatus.NO_CONTENT)
         } catch (error: any) {
             return this.errorHandlerService
             .getErrorForControllerLayer(
