@@ -25,7 +25,7 @@ export class PostService {
                 _count: {
                     select: {
                         comments: true,
-                        likes: true
+                        reactions: true
                     }
                 }
             },
@@ -67,7 +67,7 @@ export class PostService {
                 },
                 _count: {
                     select: {
-                        likes: true,
+                        reactions: true,
                         comments: true
                     }
                 }
@@ -216,13 +216,13 @@ export class PostService {
                 _count: {
                     select: {
                         comments: true,
-                        likes: true
+                        reactions: true
                     }
                 }
             },
             orderBy: [
                 {
-                    likes: {
+                    reactions: {
                         _count: "desc"
                     }
                 },
