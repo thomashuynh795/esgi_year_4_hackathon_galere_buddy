@@ -10,6 +10,8 @@ import { LikeModule } from "./like/like.module";
 import { MulterModule } from "@nestjs/platform-express";
 import { PostModule } from "./post/post.module";
 import { CommentModule } from "./comment/comment.module";
+import { TagModule } from './tag/tag.module';
+
 @Module({
     imports: [
         AuthModule,
@@ -27,7 +29,8 @@ import { CommentModule } from "./comment/comment.module";
             dest: "./uploads"
         }),
         PostModule,
-        CommentModule
+        CommentModule,
+        TagModule
     ],
     controllers: [],
     providers: []
