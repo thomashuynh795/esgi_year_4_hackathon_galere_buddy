@@ -1,0 +1,92 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DEVELOPMENT_DATABASE_URL")
+}
+
+model User {
+    id        String   @id @default(uuid())
+    email     String   @unique
+    password  String
+    name      String
+    avatarUrl String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    Post     Post[]
+    Comment  Comment[]
+    Like     Like[]
+    Bookmark Bookmark[]
+}
+
+model Post {
+    id        String   @id @default(uuid())
+    title     String
+    imageUrl  String?
+    problem   String
+    solution  String?
+    advice    String
+    lesson    String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    authorId  String
+
+    author   User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+    comments Comment[]
+    likes    Like[]
+    tags     PostTag[]
+    Bookmark Bookmark[]
+}
+
+model Comment {
+    id        String   @id @default(uuid())
+    content   String
+    postId    String
+    authorId  String
+    createdAt DateTime @default(now())
+
+    post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+    author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}
+
+model Like {
+    id        String   @id @default(uuid())
+    postId    String
+    userId    String
+    createdAt DateTime @default(now())
+
+    post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([postId, userId])
+}
+
+model Bookmark {
+    id        String   @id @default(uuid())
+    postId    String
+    userId    String
+    createdAt DateTime @default(now())
+
+    post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([postId, userId])
+}
+
+model Tag {
+    id    String    @id @default(uuid())
+    name  String    @unique
+    posts PostTag[]
+}
+
+model PostTag {
+    postId String
+    tagId  String
+    post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+    tag    Tag    @relation(fields: [tagId], references: [id])
+
+    @@id([postId, tagId])
+}
