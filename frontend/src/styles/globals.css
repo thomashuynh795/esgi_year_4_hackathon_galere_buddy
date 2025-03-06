@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+body {
+  color: var(--foreground);
+  background: var(--background); 
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .shadow-input-focused {
+      box-shadow: 0 0 0 2px theme('colors.zinc.900');
+  }
+
+  .shadow-input-invalid {
+      box-shadow: 0 0 0 2px theme('colors.red.500');
+  }
+
+  .transparent-overlay {
+      background-color: rgba(68, 68, 68, 0.3);
+  }
+
+}
