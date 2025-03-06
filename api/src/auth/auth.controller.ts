@@ -25,8 +25,8 @@ export class AuthController {
         @Res() response: Response
     ): Promise<Response> {
         try {
-            await this.authService.signUp(dto);
-            return response.status(HttpStatus.CREATED).json(new SignUpResponseAuthDto());
+            const jwt = await this.authService.signUp(dto);
+            return response.status(HttpStatus.CREATED).json({ jwt, message: "Sign up successful" });
         } catch (error: any) {
             return this.errorHandlerService.getErrorForControllerLayer(error, response);
         }

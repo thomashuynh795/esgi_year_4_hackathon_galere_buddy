@@ -15,5 +15,10 @@ export class SignUpRequestAuthDto {
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
+    firstname: string;
+
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
     name: string;
 }

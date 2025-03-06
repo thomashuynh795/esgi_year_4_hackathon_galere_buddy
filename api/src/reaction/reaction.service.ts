@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { Reaction } from "@prisma/client";
 import { CreateReactionDto } from "./dto/create-reaction.dto";
@@ -21,7 +21,7 @@ export class ReactionService {
 
       return reactions;
     } catch (error: any) {
-      throw new InternalServerErrorException("Failed to get reactions of this post.");
+      throw error;
     }
   }
 
@@ -70,7 +70,7 @@ export class ReactionService {
 
       return reaction;
     } catch (error: any) {
-      throw new InternalServerErrorException("Failed to add reaction.");
+      throw error;
     }
   }
 
@@ -84,12 +84,12 @@ export class ReactionService {
         throw new BadRequestException("Reaction not found.");
       }
 
-      await this.prisma.comment.delete({
+      await this.prisma.reaction.delete({
         where: { id: reactionId }
       });
 
     } catch (error: any) {
-      throw new InternalServerErrorException("Failed to delete the reaction.");
+      throw error;
     }
   }
 }

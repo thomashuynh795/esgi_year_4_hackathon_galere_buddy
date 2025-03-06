@@ -8,7 +8,7 @@ export class ReactionGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const user = request.user;
-    const reactionId = request.params.id;
+    const reactionId = request.params.reactionId;
     const dto = request.body;
 
     if (!user) {
@@ -19,14 +19,10 @@ export class ReactionGuard implements CanActivate {
       return true;
     }
 
-    if (reactionId) {
+    if (reactionId && Object.keys(dto).length === 0) {
       const reaction = await this.prisma.reaction.findUnique({
         where: { id: reactionId }
       });
-
-      if (!reaction) {
-        throw new ForbiddenException("Reaction not found.");
-      }
 
       if (reaction.userId !== user.id) {
         throw new ForbiddenException("You are not the user of this reaction.");

@@ -17,17 +17,19 @@ export class ReactionController {
 
     @UseGuards(JwtGuard, RolesGuard, ReactionGuard)
     @Roles(Role.ADMIN, Role.MEMBER)
-    @Delete(":id")
+    @Delete(":reactionId")
     public async deleteReaction(
-        @Param("id") reactionId: string,
+        @Param("reactionId") reactionId: string,
         @Res() response: Response
     ): Promise<Response> {
         try {
             await this.reactionService.deleteReaction(reactionId);
 
             return response
-                .status(HttpStatus.NO_CONTENT);
+                .status(HttpStatus.NO_CONTENT)
+                .json();
         } catch (error: any) {
+            console.log(error);
             return this.errorHandlerService
             .getErrorForControllerLayer(
                 error,
