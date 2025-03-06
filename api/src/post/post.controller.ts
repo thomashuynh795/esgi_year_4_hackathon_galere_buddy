@@ -5,13 +5,17 @@ import { CommentService } from "src/comment/comment.service";
 import { Response } from "express";
 import { CreateCommentDto } from "src/comment/dto/create-comment.dto";
 import { CommentGuard } from "src/comment/guard/comment.guard";
+import { ReactionGuard } from "src/reaction/guard/reaction.guard";
+import { CreateReactionDto } from "src/reaction/dto/create-reaction.dto";
+import { ReactionService } from "src/reaction/reaction.service";
 
 @Controller("post")
 export class PostController {
     constructor(
         private readonly postService: PostService,
         private readonly errorHandlerService: ErrorHandlerService,
-        private readonly commentService: CommentService
+        private readonly commentService: CommentService,
+        private readonly reactionService: ReactionService
     ) { }
 
     @Get(":id/comments")
@@ -36,7 +40,7 @@ export class PostController {
 
     @UseGuards(CommentGuard)
     @Post(":id/comments")
-    public async createComment(
+    public async commentPost(
         @Param("id") postId: string,
         @Body() createCommentDto: CreateCommentDto,
         @Res() response: Response
@@ -48,6 +52,29 @@ export class PostController {
             return response
                 .status(HttpStatus.CREATED)
                 .json(comment);
+        } catch (error: any) {
+            return this.errorHandlerService
+            .getErrorForControllerLayer(
+                error,
+                response
+            );
+        }
+    }
+
+    @UseGuards(ReactionGuard)
+    @Post(":id/reactions")
+    public async reactPost(
+        @Param("id") postId: string,
+        @Body() createReactionDto: CreateReactionDto,
+        @Res() response: Response
+    ): Promise<Response> {
+        try {
+            createReactionDto.postId = postId;
+            const reaction = await this.reactionService.addReaction(createReactionDto);
+
+            return response
+                .status(HttpStatus.CREATED)
+                .json(reaction);
         } catch (error: any) {
             return this.errorHandlerService
             .getErrorForControllerLayer(

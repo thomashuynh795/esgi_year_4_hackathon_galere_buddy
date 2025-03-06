@@ -3,5 +3,5 @@ import { ReactionService } from "./reaction.service";
 
 @Controller("like")
 export class ReactionController {
-    constructor(private readonly likeService: ReactionService) { }
+    constructor(private readonly reactionService: ReactionService) { }
 }

@@ -44,7 +44,7 @@ export class CommentController {
            await this.commentService.deleteComment(commentId);
            
            return response
-                .status(HttpStatus.NO_CONTENT)
+                .status(HttpStatus.NO_CONTENT);
         } catch (error: any) {
             return this.errorHandlerService
             .getErrorForControllerLayer(
