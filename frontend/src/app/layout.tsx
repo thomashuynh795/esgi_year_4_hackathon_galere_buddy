@@ -12,8 +12,8 @@ const geistSans = Geist({
 
 
 export const metadata: Metadata = {
-  title: "Leitner system",
-  description: "Graphical interface for Leitner System",
+  title: "GalèreBuddy",
+  description: "Raconte une anecdote",
 };
 
 export default function RootLayout({
