@@ -16,9 +16,9 @@ interface TextFieldProps extends React.ComponentProps<"input"> {
 }
 
 export const TextField = React.forwardRef((props: TextFieldProps, forwadedRef) => {
-  const { className, label, icon, invalid = false, disabled, type = "text", errorMessage, required, onChange, ...rest } = props;
+  const { className, label, icon, invalid = false, disabled, type = "text", errorMessage, onChange, ...rest } = props;
   const cn = classNames(
-    "flex w-full text-gray-800 text-sm outline-none py-2 px-4 flex-1 placeholder:text-slate-400 placeholder:text-sm placeholder:capitalize bg-transparent border-solid  border-gray-200 appearance-none",
+    "flex w-full text-gray-800 text-sm outline-none py-2 px-4 flex-1 placeholder:text-slate-400 placeholder:text-sm bg-transparent border-solid  border-gray-200 appearance-none",
     className,
     { "border-l-[1px]": icon },
   );
