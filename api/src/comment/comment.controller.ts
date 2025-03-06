@@ -18,9 +18,9 @@ export class CommentController {
 
     @UseGuards(JwtGuard, RolesGuard, CommentGuard)
     @Roles(Role.ADMIN, Role.MEMBER)
-    @Put(":id")
+    @Put(":commentId")
     public async editComment(
-        @Param("id") commentId: string,
+        @Param("commentId") commentId: string,
         @Body() updateCommentDto: UpdateCommentDto,
         @Res() response: Response
     ): Promise<Response> {
@@ -41,16 +41,17 @@ export class CommentController {
 
     @UseGuards(JwtGuard, RolesGuard, CommentGuard)
     @Roles(Role.ADMIN, Role.MEMBER)
-    @Delete(":id")
+    @Delete(":commentId")
     public async deleteComment(
-        @Param("id") commentId: string,
+        @Param("commentId") commentId: string,
         @Res() response: Response
     ): Promise<Response> {
         try {
            await this.commentService.deleteComment(commentId);
            
            return response
-                .status(HttpStatus.NO_CONTENT);
+                .status(HttpStatus.NO_CONTENT)
+                .json();
         } catch (error: any) {
             return this.errorHandlerService
             .getErrorForControllerLayer(
