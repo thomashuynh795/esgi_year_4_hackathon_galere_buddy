@@ -1,8 +1,8 @@
-import {Injectable} from "@nestjs/common";
+import {Injectable, NotFoundException} from "@nestjs/common";
 import {PrismaService} from "../prisma/prisma.service";
 
 @Injectable()
-export class TagsService {
+export class TagService {
   constructor(private prisma: PrismaService) {}
 
   async findAll() {
@@ -23,7 +23,7 @@ export class TagsService {
   }
 
   async findOne(id: string) {
-    return this.prisma.tag.findUnique({
+    const tag = await this.prisma.tag.findUnique({
       where: { id },
       include: {
         posts: {
@@ -43,6 +43,12 @@ export class TagsService {
         }
       }
     });
+
+    if (!tag) {
+      throw new NotFoundException(`Tag with ID ${id} not found`);
+    }
+
+    return tag;
   }
 
   async create(name: string) {
@@ -50,4 +56,17 @@ export class TagsService {
       data: { name }
     });
   }
+
+    async update(id: string, name: string) {
+        return this.prisma.tag.update({
+        where: { id },
+        data: { name }
+        });
+    }
+
+    async delete(id: string) {
+      return this.prisma.tag.delete({
+      where: { id }
+      });
+    }
 }

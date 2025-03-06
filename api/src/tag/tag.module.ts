@@ -1,5 +1,5 @@
 import {TagController} from "./tag.controller";
-import {TagService} from "../../dist/src/tag/tag.service";
+import {TagService} from "./tag.service";
 import {Module} from "@nestjs/common";
 
 @Module({
