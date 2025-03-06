@@ -2,10 +2,14 @@ import { BadRequestException, Injectable, InternalServerErrorException } from "@
 import { PrismaService } from "src/prisma/prisma.service";
 import { Reaction } from "@prisma/client";
 import { CreateReactionDto } from "./dto/create-reaction.dto";
+import { NotificationGateway } from "src/common/gateway/notification.gateway";
 
 @Injectable()
 export class ReactionService {
-  public constructor(private readonly prisma: PrismaService) {}
+  public constructor(
+    private readonly prisma: PrismaService,
+    private readonly notificationGateway: NotificationGateway
+  ) {}
 
   public async getReactionsByPostId(postId: string): Promise<Reaction[]> {
     try {
@@ -21,7 +25,7 @@ export class ReactionService {
     }
   }
 
-  public async addReaction(dto: CreateReactionDto): Promise<void> {
+  public async addReaction(dto: CreateReactionDto): Promise<Reaction> {
     try {
       const post = await this.prisma.post.findUnique({
         where: { id: dto.postId }
@@ -54,13 +58,17 @@ export class ReactionService {
         });
       }
 
-      await this.prisma.reaction.create({
+      const reaction = await this.prisma.reaction.create({
         data: {
           postId: dto.postId,
           userId: dto.userId,
-          reaction: dto.reaction
+          react: dto.react
         }
       });
+
+      this.notificationGateway.sendNotificationToUser(post.authorId, "Someone react to your post !");
+
+      return reaction;
     } catch (error: any) {
       throw new InternalServerErrorException("Failed to add reaction.");
     }

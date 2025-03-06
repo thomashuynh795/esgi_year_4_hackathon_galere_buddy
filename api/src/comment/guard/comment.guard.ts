@@ -15,6 +15,10 @@ export class CommentGuard implements CanActivate {
       throw new ForbiddenException("You are not authenticated.");
     }
 
+    if (user.role === "ADMIN") {
+      return true;
+    }
+
     if (commentId && !dto) {
       const comment = await this.prisma.comment.findUnique({
         where: { id: commentId }

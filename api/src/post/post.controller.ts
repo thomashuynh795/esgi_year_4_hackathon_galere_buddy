@@ -12,6 +12,9 @@ import { CommentGuard } from "src/comment/guard/comment.guard";
 import { ReactionGuard } from "src/reaction/guard/reaction.guard";
 import { CreateReactionDto } from "src/reaction/dto/create-reaction.dto";
 import { ReactionService } from "src/reaction/reaction.service";
+import { RolesGuard } from "src/auth/guard/roles.guard";
+import { Role } from "@prisma/client";
+import { Roles } from "src/auth/decorator/roles.decorator";
 
 @Controller("post")
 export class PostController {
@@ -61,6 +64,8 @@ export class PostController {
     }
 
 
+    @UseGuards(JwtGuard, RolesGuard)
+    @Roles(Role.ADMIN, Role.MEMBER)
     @Get(":id/comments")
     public async getCommentsOfPost(
         @Param("id") id: string,
@@ -81,7 +86,8 @@ export class PostController {
         }
     }
 
-    @UseGuards(CommentGuard)
+    @UseGuards(JwtGuard, RolesGuard, CommentGuard)
+    @Roles(Role.ADMIN, Role.MEMBER)
     @Post(":id/comments")
     public async commentPost(
         @Param("id") postId: string,
@@ -104,7 +110,8 @@ export class PostController {
         }
     }
 
-    @UseGuards(ReactionGuard)
+    @UseGuards(JwtGuard, RolesGuard, ReactionGuard)
+    @Roles(Role.ADMIN, Role.MEMBER)
     @Post(":id/reactions")
     public async reactPost(
         @Param("id") postId: string,
@@ -127,6 +134,8 @@ export class PostController {
         }
     }
 
+    @UseGuards(JwtGuard, RolesGuard)
+    @Roles(Role.ADMIN, Role.MEMBER)
     @Get(":id/reactions")
     public async getReactionsOfPost(
         @Param("id") postId: string,

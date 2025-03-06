@@ -4,6 +4,10 @@ import { ErrorHandlerService } from "src/common/utils/error-handler/error-handle
 import { Response } from "express";
 import { UpdateCommentDto } from "./dto/update-comment.dto";
 import { CommentGuard } from "./guard/comment.guard";
+import { JwtGuard } from "src/auth/guard/jwt.guard";
+import { RolesGuard } from "src/auth/guard/roles.guard";
+import { Role } from "@prisma/client";
+import { Roles } from "src/auth/decorator/roles.decorator";
 
 @Controller("comment")
 export class CommentController {
@@ -12,7 +16,8 @@ export class CommentController {
         private readonly errorHandlerService: ErrorHandlerService
     ) { }
 
-    @UseGuards(CommentGuard)
+    @UseGuards(JwtGuard, RolesGuard, CommentGuard)
+    @Roles(Role.ADMIN, Role.MEMBER)
     @Put(":id")
     public async editComment(
         @Param("id") commentId: string,
@@ -34,7 +39,8 @@ export class CommentController {
         }
     }
 
-    @UseGuards(CommentGuard)
+    @UseGuards(JwtGuard, RolesGuard, CommentGuard)
+    @Roles(Role.ADMIN, Role.MEMBER)
     @Delete(":id")
     public async deleteComment(
         @Param("id") commentId: string,
