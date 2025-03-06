@@ -38,7 +38,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       secondary: "text-gray-900 bg-white shadow-button hover:bg-gray-100",
       outline: "text-gray-900 border border-solid border-zinc-200 bg-white hover:bg-gray-100",
       rounded:
-        "text-white bg-zinc-600 !px-6 hover:bg-zinc-700 !rounded-full !h-10",
+        "text-white bg-zinc-900 !px-6 hover:bg-zinc-700 !rounded-full !h-10",
     };
 
     const cn = classNames(

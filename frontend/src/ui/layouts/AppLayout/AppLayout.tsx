@@ -2,6 +2,8 @@ import React from "react";
 import classNames from "classnames";
 import { NavLink, Sidebar } from "@ui/organisms/Sidebar/Sidebar";
 import { ScrollView } from "@ui/layouts/ScrollView/ScrollView";
+import { BottomNav } from "@/ui/organisms/Nav/BottomNav/BottomNav";
+import { TopNav } from "@/ui/organisms/Nav/TopNav/TopNav";
 
 interface AppLayoutProps extends React.ComponentProps<"div"> {
   links: NavLink[];
@@ -9,19 +11,31 @@ interface AppLayoutProps extends React.ComponentProps<"div"> {
 
 export function AppLayout(props: AppLayoutProps) {
   const { children, className, links, ...rest } = props;
-  const cn = classNames("w-full h-full flex flex-row bg-zinc-50", className);
+  const cn = classNames("w-full h-full flex flex-row bg-zinc-100", className);
 
   return (
     <section className={cn} {...rest}>
-      <Sidebar links={links} />
+      <Sidebar links={links} className="hidden md:flex"/>
+      <BottomNav links={links} className="md:hidden"/>
+      <TopNav className="md:hidden"/>
 
-      <section className={"w-full h-full py-3"}>
+      <section className={"w-full h-full"}>
         <section
           className={
-            "w-full h-full rounded-l-xl border-solid border-[1px] border-gray-200 shadow-sm bg-white"
+            "w-full h-full  border-solid border-l-[1px] border-r-[1px] border-gray-200"
           }
         >
-          <ScrollView pb={81}>{children}</ScrollView>
+          <ScrollView>{children}</ScrollView>
+        </section>
+      </section>
+
+      <section className={"hidden lg:inline-block w-full max-w-60 h-full"}>
+        <section
+          className={
+            "w-full h-full"
+          }
+        >
+          <ScrollView><div className="bg-white h-10">Post favoris</div></ScrollView>
         </section>
       </section>
     </section>

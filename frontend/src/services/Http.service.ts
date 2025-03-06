@@ -13,10 +13,13 @@ export class HttpService {
     return HttpService._instance;
   }
 
-  private async request(method: string, endpoint: string, body?: unknown): Promise<Response> {
-
+  private async request<T>(
+    method: string,
+    endpoint: string,
+    body?: unknown
+  ): Promise<T> {
     try {
-      const response :Response = await fetch(`${this.baseUrl}${endpoint}`, {
+      const response = await fetch(`${this.baseUrl}${endpoint}`, {
         method,
         headers: {
           "Content-Type": "application/json",
@@ -25,47 +28,37 @@ export class HttpService {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP Error ${response.status}: ${response.statusText}`);
+        throw new Error(
+          `HTTP Error ${response.status}: ${response.statusText}`
+        );
       }
 
-
+      const data = await response.json();
+      return data as T;
+      
     } catch (error) {
-      //console.error("Request failed:", error);
+      console.error("Request failed:", error);
       throw error; // Re-throw to handle errors in calling code
     }
   }
 
-  public async get(endpoint: string): Promise<Response> {
-
-    return this.request("GET", endpoint);
+  public async get<T>(endpoint: string): Promise<T> {
+    return this.request<T>("GET", endpoint);
   }
 
-  public async post(endpoint: string, body?: unknown): Promise<Response> {
-    return this.request("POST", endpoint, body);
+  public async post<T>(endpoint: string, body?: unknown): Promise<T> {
+    return this.request<T>("POST", endpoint, body);
   }
 
-
-  public async put<T>(endpoint: string, body?: unknown): Promise<Response> {
-    return this.request("PUT", endpoint, body);
+  public async put<T>(endpoint: string, body?: unknown): Promise<T> {
+    return this.request<T>("PUT", endpoint, body);
   }
 
-  public async patch<T>(endpoint: string, body?: unknown): Promise<Response> {
-
-  public async put(endpoint: string, body?: unknown): Promise<Response> {
-    return this.request("PUT", endpoint, body);
+  public async patch<T>(endpoint: string, body?: unknown): Promise<T> {
+    return this.request<T>("PATCH", endpoint, body);
   }
 
-  public async patch(endpoint: string, body?: unknown): Promise<Response> {
-
-    return this.request("PATCH", endpoint, body);
+  public async delete<T>(endpoint: string, body?: unknown): Promise<T> {
+    return this.request<T>("DELETE", endpoint, body);
   }
-
-
-  public async delete<T>(endpoint: string, body?: unknown): Promise<Response> {
-
-  public async delete(endpoint: string, body?: unknown): Promise<Response> {
-
-    return this.request("DELETE", endpoint, body);
-  }
-
 }

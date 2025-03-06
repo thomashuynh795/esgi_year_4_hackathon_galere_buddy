@@ -4,7 +4,7 @@ import {TextField} from "@ui/atoms/Inputs/TextField/TextField";
 import {Button} from "@ui/atoms/Button/Button";
 import {Mail} from "@icons"
 import Link from "next/link";
-import {login} from "@/services/fetch.service";
+//import {login} from "@/services/fetch.service";
 import {open} from "@/ui/organisms/Toast/Toast"
 
 
@@ -38,7 +38,7 @@ export default function Login() {
 
         try {
             const response = await fetch(
-                "http://localhost:3002/auth/log-in",
+                "http://localhost:3000/auth/log-in",
                 {   method: "POST",
                     headers: {
                     "Content-Type": "application/json",

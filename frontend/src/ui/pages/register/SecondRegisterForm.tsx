@@ -5,6 +5,8 @@ import { Stack } from "@/ui/layouts/Stack/Stack";
 import * as Drawer from "@/ui/organisms/Drawer/Drawer";
 import AvatarSelector from "./AvatarSelector"; 
 import { createUser } from "@/services/fetch.service";
+import {open as openToast} from "@ui/organisms/Toast/Toast";
+import { useAuthContext } from "@/hooks/useContext";
 
 interface SecondRegisterFormProps {
   goBack: () => void;
@@ -31,10 +33,21 @@ export default function SecondRegisterForm({
   formData,
   setFormData,
 }: SecondRegisterFormProps) {
+  const {login} = useAuthContext();
+
+
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     console.log(formData)
-    await createUser(formData)
+    const res: {jwt: string, message: string} = await createUser(formData);
+
+    openToast({
+      title: "Success",
+      description: "Votre compte a bien été créé",
+      style: "success"
+    })
+
+    login({token: res.jwt})
   };
 
   return (

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ReactNode } from "react";
+import React, { ReactElement, ReactNode } from "react";
 import classNames from "classnames";
 import Link from "next/link";
 import Logo from "@ui/atoms/Logo/Logo";
@@ -8,6 +8,10 @@ import { Stack } from "@ui/layouts/Stack/Stack";
 import { Button } from "@ui/atoms/Button/Button";
 import { ScrollView } from "@ui/layouts/ScrollView/ScrollView";
 import { usePathname, useRouter } from "next/navigation";
+import { LogOutRoundedIcon } from "@/ui/atoms/Icon/Icon";
+import { Avatar } from "@/ui/atoms/Avatar/Avatar";
+import { Heading } from "@/ui/atoms/Heading/Heading";
+import { Text } from "@/ui/atoms/Text/Text";
 
 export interface NavLink {
   name: string;
@@ -30,7 +34,7 @@ export function Sidebar(props: SidebarProps) {
     <Stack direction={"col"} className={cn} {...rest}>
       <SidebarHeader />
 
-      <ScrollView className={"mt-14"}>
+      <ScrollView className={"mt-5"}>
         <SidebarNav links={links} />
       </ScrollView>
 
@@ -43,7 +47,7 @@ type SidebarHeaderProps = React.ComponentProps<"div">;
 const SidebarHeader = (props: SidebarHeaderProps) => {
   const { className, ...rest } = props;
   const cn = classNames(
-    "px-5 py-3 border-solid border-b-[1px] border-gray-200 h-16",
+    "px-8 py-3",
     className
   );
   return (
@@ -60,20 +64,20 @@ interface SidebarNavProps extends React.ComponentProps<"nav"> {
 }
 const SidebarNav = (props: SidebarNavProps) => {
   const { className, links, ...rest } = props;
-  const cn = classNames("px-2.5", className);
+  const cn = classNames("px-5", className);
 
   return (
     <nav className={cn} {...rest}>
       <ul
         className={
-          "w-full flex flex-col items-start justify-start text-gray-600 space-y-2"
+          "w-full flex flex-col items-start justify-start text-gray-600"
         }
       >
         {links.map((link, index) => (
           <li key={index} className={"w-full"}>
             <SidebarNavLink href={link.href}>
-              {link.icon}
-              <p>{link.name}</p>
+             {link.icon}
+              <p className="text-[1.25rem]">{link.name}</p>
             </SidebarNavLink>
           </li>
         ))}
@@ -95,7 +99,7 @@ const SidebarNavLink = (props: SidebarNavLinkProps) => {
     <Link
       {...rest}
       className={classNames(
-        "w-full flex flex-row items-center space-x-4 px-4 py-2 rounded-xl hover:bg-zinc-100 hover:text-zinc-900 text-sm font-medium",
+        "w-full flex flex-row items-center space-x-4 px-4 py-2 rounded-xl hover:bg-zinc-100 hover:text-zinc-900 text-base font-medium",
         className,
         { "text-zinc-900 bg-zinc-100": props.href === pathname }
       )}
@@ -108,7 +112,7 @@ const SidebarNavLink = (props: SidebarNavLinkProps) => {
 type SidebarFooterProps = React.ComponentProps<"div">;
 const SidebarFooter = (props: SidebarFooterProps) => {
   const { className, ...rest } = props;
-  const cn = classNames("px-2.5", className);
+  const cn = classNames("px-5", className);
   const pathName = usePathname();
   const router = useRouter();
 
@@ -122,16 +126,14 @@ const SidebarFooter = (props: SidebarFooterProps) => {
   return (
     <div className={cn} {...rest}>
       <Stack direction={"col"} gapy={14}>
-        {/* <Link href={""} className={"text-gray-700"}>
-          <Button
-            position={"left"}
-            label={"Logout"}
-            // icon={<LogOutRoundedIcon />}
-            variant={"ghost"}
-            onClick={() => {}}
-            className={"!justify-start w-full"}
-          />
-        </Link> */}
+        <Button label={"Poster"} variant="rounded"/>
+        <Link href={"/login"} className={"text-gray-700 flex flex-row items-center space-x-3"}>
+        <Avatar/>
+        <Stack direction="col">
+          <Heading level={4} className="text-sm !text-medium">Roger Bentcha</Heading>
+          <Text>@rogerb</Text>
+        </Stack>
+        </Link>
       </Stack>
     </div>
   );

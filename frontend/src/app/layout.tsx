@@ -1,9 +1,12 @@
+"use client";
+
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import classNames from "classnames";
 import "../styles/globals.css";
 import { Toast } from "@/ui/organisms/Toast/Toast";
 import * as Alert from "@/ui/organisms/Alert/Alert";
+import AuthProvider from "@/context/auth.context";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -11,10 +14,10 @@ const geistSans = Geist({
 });
 
 
-export const metadata: Metadata = {
-  title: "GalèreBuddy",
-  description: "Raconte une anecdote",
-};
+// export const metadata: Metadata = {
+//   title: "GalèreBuddy",
+//   description: "Raconte une anecdote",
+// };
 
 export default function RootLayout({
   children,
@@ -24,11 +27,16 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body
-        className={classNames(geistSans.className, "fixed overflow-hidden h-screen w-screen antialiased")}
+        className={classNames(
+          geistSans.className,
+          "fixed overflow-hidden h-screen w-screen antialiased"
+        )}
       >
-        {children}
-        <Toast />
-        <Alert.Root />
+        <AuthProvider>
+          {children}
+          <Toast />
+          <Alert.Root />
+        </AuthProvider>
       </body>
     </html>
   );

@@ -1,16 +1,18 @@
 import {
-  FileText,
-  Inbox,
+  Award,
+  House,
   Settings2,
+  UserRoundCog,
 } from "@icons";
 
 const navLinks = [
-  { name: "Fiches", href: "/dashboard/cards", icon: <FileText size={16} /> },
-  { name: "Quizz", href: "/dashboard/quizz", icon: <Inbox size={16} /> },
+  { name: "Accueil", href: "/dashboard", icon: <House size={26} />, onDesktop: true},
+  { name: "Favoris", href: "/dashboard/favoris", icon: <Award size={26} />, onDesktop: true},
+  { name: "Profil", href: "/dashboard/profil", icon: <UserRoundCog size={26} />, onDesktop: true},
   // {
   //   name: "Paramètres",
   //   href: "/dashboard/settings",
-  //   icon: <Settings2 size={16} />,
+  //   icon: <Settings2 size={26} />,
   // },
 ];
 
