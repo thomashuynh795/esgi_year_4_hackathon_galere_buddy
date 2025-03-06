@@ -3,21 +3,22 @@ import React from "react";
 import { Button } from "@/ui/atoms/Button/Button";
 import { Stack } from "@/ui/layouts/Stack/Stack";
 import * as Drawer from "@/ui/organisms/Drawer/Drawer";
-import AvatarSelector from "./AvatarSelector";
+import AvatarSelector from "./AvatarSelector"; 
+import { createUser } from "@/services/fetch.service";
 
 interface SecondRegisterFormProps {
   goBack: () => void;
   formData: {
-    lastName: string;
-    firstName: string;
+    name: string;
+    firstname: string;
     email: string;
     password: string;
     profilePicture: string;
   };
   setFormData: React.Dispatch<
     React.SetStateAction<{
-      lastName: string;
-      firstName: string;
+      name: string;
+      firstname: string;
       email: string;
       password: string;
       profilePicture: string;
@@ -30,13 +31,19 @@ export default function SecondRegisterForm({
   formData,
   setFormData,
 }: SecondRegisterFormProps) {
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    console.log(formData)
+    await createUser(formData)
+  };
+
   return (
     <>
       <Stack className="mt-5 p-5" direction={"col"} gapy={5}>
         <p className="text-center">Mon avatar</p>
         <div className="rounded-full border border-gray-300 w-30 overflow-hidden self-center">
           <img
-            src={formData.profilePicture} // ✅ Utilisation de `formData`
+            src={formData.profilePicture}
             alt="avatar picture"
             className="self-center"
           />
@@ -66,7 +73,12 @@ export default function SecondRegisterForm({
           onClick={goBack}
         />
 
-        <Button className="py-3 mt-5" label={"Suivant"} type="submit" />
+        <Button
+          className="py-3 mt-5"
+          label={"Valider et Créer mon compte"}
+          type="submit"
+          onClick={handleSubmit}
+        />
       </Stack>
     </>
   );

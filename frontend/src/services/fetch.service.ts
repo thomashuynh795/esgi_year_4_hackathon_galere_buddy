@@ -7,8 +7,15 @@ export async function getCards<T>(): Promise<T> {
 }
 
 export async function createUser(user: NewUser) {
-  return await http.post<IUser>("/auth/sign-up", user);
+  try {
+    const response = await http.post<IUser>("/auth/sign-up", user);
+    return response;
+  } catch (error) {
+    console.error("Erreur lors de la création de l'utilisateur :", error);
+    throw error;  
+  }
 }
+
 
 export async function updateCardRequest(card: ICard) {
   return await http.put<ICard>(`/cards/${card.id}`, card);

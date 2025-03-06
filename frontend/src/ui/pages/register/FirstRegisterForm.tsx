@@ -8,16 +8,16 @@ import { Mail } from "lucide-react";
 interface FirstRegisterFormProps {
   onSuccess: () => void;
   formData: {
-    lastName: string;
-    firstName: string;
+    name: string;
+    firstname: string;
     email: string;
     password: string;
     profilePicture:string;
   };
   setFormData: React.Dispatch<
     React.SetStateAction<{
-      lastName: string;
-      firstName: string;
+      name: string;
+      firstname: string;
       email: string;
       password: string;
       profilePicture: string;
@@ -63,16 +63,16 @@ export default function FirstRegisterForm({
         <TextField
           type="text"
           placeholder="Nom"
-          name="lastName"
-          value={formData.lastName || ""}
+          name="name"
+          value={formData.name || ""}
           onChange={handleChange}
           required
         />
         <TextField
           type="text"
           placeholder="Prénom"
-          name="firstName"
-          value={formData.firstName || ""}
+          name="firstname"
+          value={formData.firstname || ""}
           onChange={handleChange}
           required
         />
