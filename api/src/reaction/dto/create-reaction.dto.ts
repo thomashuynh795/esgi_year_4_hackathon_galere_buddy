@@ -1,4 +1,5 @@
-import { IsNotEmpty } from "class-validator";
+import { IsEnum, IsNotEmpty } from "class-validator";
+import { React } from "@prisma/client";
 
 export class CreateReactionDto {
   @IsNotEmpty()
@@ -7,6 +8,7 @@ export class CreateReactionDto {
   @IsNotEmpty()
   userId: string;
 
+  @IsEnum(React)
   @IsNotEmpty()
-  reaction: string;
+  react: React;
 }

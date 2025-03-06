@@ -3,10 +3,14 @@ import { PrismaService } from "src/prisma/prisma.service";
 import { CreateCommentDto } from "./dto/create-comment.dto";
 import { Comment } from "@prisma/client";
 import { UpdateCommentDto } from "./dto/update-comment.dto";
+import { NotificationGateway } from "src/common/gateway/notification.gateway";
 
 @Injectable()
 export class CommentService {
-  public constructor(private readonly prisma: PrismaService) {}
+  public constructor(
+    private readonly prisma: PrismaService,
+    private readonly notificationGateway: NotificationGateway
+  ) {}
 
   public async createComment(dto: CreateCommentDto): Promise<Comment> {
     try {
@@ -33,6 +37,8 @@ export class CommentService {
           authorId: dto.authorId
         }
       });
+
+      this.notificationGateway.sendNotificationToUser(post.authorId, "Someone comment your post !");
 
       return comment;
     } catch (error: any) {

@@ -15,6 +15,10 @@ export class ReactionGuard implements CanActivate {
       throw new ForbiddenException("You are not authenticated.");
     }
 
+    if (user.role === "ADMIN") {
+      return true;
+    }
+
     if (reactionId) {
       const reaction = await this.prisma.reaction.findUnique({
         where: { id: reactionId }
@@ -25,7 +29,7 @@ export class ReactionGuard implements CanActivate {
       }
 
       if (reaction.userId !== user.id) {
-        throw new ForbiddenException("You are not the author of this reaction.");
+        throw new ForbiddenException("You are not the user of this reaction.");
       }
     }
 

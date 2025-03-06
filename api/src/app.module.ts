@@ -10,6 +10,7 @@ import { ReactionModule } from "./reaction/reaction.module";
 import { MulterModule } from "@nestjs/platform-express";
 import { PostModule } from "./post/post.module";
 import { CommentModule } from "./comment/comment.module";
+import { NotificationGateway } from "./common/gateway/notification.gateway";
 @Module({
     imports: [
         AuthModule,
@@ -30,6 +31,6 @@ import { CommentModule } from "./comment/comment.module";
         CommentModule
     ],
     controllers: [],
-    providers: []
+    providers: [NotificationGateway]
 })
 export class AppModule { }
