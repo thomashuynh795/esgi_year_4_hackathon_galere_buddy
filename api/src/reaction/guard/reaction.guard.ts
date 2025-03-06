@@ -1,5 +1,5 @@
-import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from "@nestjs/common";
+import { PrismaService } from "src/prisma/prisma.service";
 
 @Injectable()
 export class ReactionGuard implements CanActivate {
@@ -12,20 +12,20 @@ export class ReactionGuard implements CanActivate {
     const dto = request.body;
 
     if (!user) {
-      throw new ForbiddenException('You are not authenticated.');
+      throw new ForbiddenException("You are not authenticated.");
     }
 
     if (reactionId) {
       const reaction = await this.prisma.reaction.findUnique({
-        where: { id: reactionId },
+        where: { id: reactionId }
       });
 
       if (!reaction) {
-        throw new ForbiddenException('Reaction not found.');
+        throw new ForbiddenException("Reaction not found.");
       }
 
       if (reaction.userId !== user.id) {
-        throw new ForbiddenException('You are not the author of this reaction.');
+        throw new ForbiddenException("You are not the author of this reaction.");
       }
     }
 

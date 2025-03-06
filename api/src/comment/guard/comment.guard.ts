@@ -17,7 +17,7 @@ export class CommentGuard implements CanActivate {
 
     if (commentId && !dto) {
       const comment = await this.prisma.comment.findUnique({
-        where: { id: commentId },
+        where: { id: commentId }
       });
 
       if (!comment) {
