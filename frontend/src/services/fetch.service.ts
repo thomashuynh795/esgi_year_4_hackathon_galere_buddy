@@ -17,6 +17,10 @@ export async function deleteCardRequest(id: string): Promise<{ ok: boolean }> {
   return await http.delete(`/cards/${id}`);
 }
 
+export async function login(email: string, password: string) {
+  return await http.post(`/login`, {email, password});
+}
+
 export async function getTodayQuizzRequest() {
   // const date = new Date();
   // date.setDate(10);
