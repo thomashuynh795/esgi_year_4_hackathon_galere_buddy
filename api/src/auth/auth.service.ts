@@ -4,7 +4,7 @@ import { hash, compare } from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
 import { User } from "@prisma/client";
 import { SignUpRequestAuthDto } from "./dto/sign-up-request-auth.dto";
-import { LogInAuthDto } from "./dto/log-in-request-auth.dto";
+import { LogInRequestAuthDto } from "./dto/log-in-request-auth.dto";
 
 @Injectable()
 export class AuthService {
@@ -42,7 +42,7 @@ export class AuthService {
     }
 
     public async logIn(
-        dto: LogInAuthDto
+        dto: LogInRequestAuthDto
     ): Promise<string> {
         try {
             const user: User = await this.prisma.user.findUnique({
