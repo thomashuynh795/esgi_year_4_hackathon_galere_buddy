@@ -2,6 +2,7 @@ import { BadRequestException, Injectable, InternalServerErrorException } from "@
 import { PrismaService } from "src/prisma/prisma.service";
 import { CreateCommentDto } from "./dto/create-comment.dto";
 import { Comment } from "@prisma/client";
+import { UpdateCommentDto } from "./dto/update-comment.dto";
 
 @Injectable()
 export class CommentService {
@@ -75,7 +76,7 @@ export class CommentService {
     }
   }
 
-  public async editComment(commentId: string, newContent: string): Promise<Comment> {
+  public async editComment(commentId: string, dto: UpdateCommentDto): Promise<Comment> {
     try {
       const comment = await this.prisma.comment.findUnique({
         where: { id: commentId }
@@ -88,7 +89,7 @@ export class CommentService {
       const updatedComment = await this.prisma.comment.update({
         where: { id: commentId },
         data: {
-          content: newContent
+          content: dto.content
         }
       });
 

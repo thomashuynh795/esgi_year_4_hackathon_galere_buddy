@@ -1,9 +1,10 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Res } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Param, Post, Res, UseGuards } from "@nestjs/common";
 import { PostService } from "./post.service";
 import { ErrorHandlerService } from "src/common/utils/error-handler/error-handler.service";
 import { CommentService } from "src/comment/comment.service";
 import { Response } from "express";
 import { CreateCommentDto } from "src/comment/dto/create-comment.dto";
+import { CommentGuard } from "src/comment/guard/comment.guard";
 
 @Controller("post")
 export class PostController {
@@ -33,6 +34,7 @@ export class PostController {
         }
     }
 
+    @UseGuards(CommentGuard)
     @Post(":id/comments")
     public async createComment(
         @Param("id") postId: string,
