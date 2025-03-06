@@ -83,4 +83,24 @@ export class PostController {
             );
         }
     }
+
+    @Get(":id/reactions")
+    public async getReactionsOfPost(
+        @Param("id") postId: string,
+        @Res() response: Response
+    ): Promise<Response> {
+        try {
+            const reactions = this.reactionService.getReactionsByPostId(postId);
+
+            return response
+                .status(HttpStatus.OK)
+                .json(reactions);
+        } catch (error: any) {
+            return this.errorHandlerService
+            .getErrorForControllerLayer(
+                error,
+                response
+            );
+        }
+    }
 }
