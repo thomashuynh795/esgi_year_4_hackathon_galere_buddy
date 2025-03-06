@@ -9,12 +9,7 @@ export class ErrorHandlerService {
         res: Response
     ): Response {
         const { statusCode, message } = this.mapErrorToHttpResponse(error);
-        return res
-            .status(statusCode)
-            .json({
-                statusCode,
-                message
-            });
+        return res.status(statusCode).json({ statusCode, message });
     }
 
     private mapErrorToHttpResponse(

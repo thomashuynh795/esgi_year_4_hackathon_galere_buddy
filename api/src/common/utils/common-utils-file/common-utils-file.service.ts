@@ -10,9 +10,7 @@ export class CommonUtilsFileService {
         const mimeTypes: { [key: string]: string } = {
             "jpeg": "image/jpeg",
             "jpg": "image/jpeg",
-            "png": "image/png",
-            "pdf": "application/pdf",
-            "epub": "application/epub+zip"
+            "png": "image/png"
         };
         return mimeTypes[fileExtension.toLowerCase()] || "application/octet-stream";
     }
@@ -39,7 +37,7 @@ export class CommonUtilsFileService {
     public extractExtension(
         filename: string
     ): string {
-        const match: RegExpMatchArray = filename.match(/\.(jpeg|jpg|pdf|png|epub+zip)$/i);
+        const match: RegExpMatchArray = filename.match(/\.(jpeg|jpg|png)$/i);
         if (match) {
             return match[0].substring(1);
         }

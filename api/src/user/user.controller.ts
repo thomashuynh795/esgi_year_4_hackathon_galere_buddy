@@ -32,23 +32,24 @@ export class UserController {
 
     @UseGuards(JwtGuard)
     @Patch("me")
-    @UseInterceptors(FileInterceptor("profileImageFile"))
+    @UseInterceptors(FileInterceptor("avatarFile"))
     public async updateMe(
+        @Req() request: CustomisedExpressRequest,
+        @Body() dto: UpdateUserRequestDto,
+        @Res() response: Response,
         @UploadedFile(
             new ParseFilePipe({
                 validators: [
                     new MaxFileSizeValidator({ maxSize: 999999 }),
                     new FileTypeValidator({ fileType: /.(jpeg|jpg|png)$/ })
-                ]
+                ],
+                fileIsRequired: false
             })
-        ) profileImageFile: Express.Multer.File,
-        @Req() request: CustomisedExpressRequest,
-        @Body() dto: UpdateUserRequestDto,
-        @Res() response: Response
+        ) avatarFile?: Express.Multer.File
     ): Promise<Response> {
         try {
             const updatedUser: Omit<User, "password"> =
-                await this.userService.updateUser(request.user.id, dto, profileImageFile);
+                await this.userService.updateUser(request.user.id, dto, avatarFile);
             return response.status(200).json({ updatedUser });
         } catch (error: any) {
             return this.errorHandlerService.getErrorForControllerLayer(error, response);
@@ -63,16 +64,10 @@ export class UserController {
     ): Promise<Response> {
         try {
             const deletedUser: Omit<User, "password"> =
-                await this.userService.deleteUser(
-                    request.user.id
-                );
+                await this.userService.deleteUser(request.user.id);
             return response.status(200).json(deletedUser);
         } catch (error: any) {
-            return this.errorHandlerService
-                .getErrorForControllerLayer(
-                    error,
-                    response
-                );
+            return this.errorHandlerService.getErrorForControllerLayer(error, response);
         }
     }
 }

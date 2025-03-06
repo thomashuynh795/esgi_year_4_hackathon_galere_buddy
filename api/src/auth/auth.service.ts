@@ -21,7 +21,8 @@ export class AuthService {
             const data = {
                 email: dto.email,
                 password: hashedPassword,
-                name: dto.name
+                name: dto.name,
+                avatarUrl: "https://esgi-year-4-hackathon-galere-buddy.s3.eu-west-3.amazonaws.com/default_profile_picture.png"
             };
             const user: Partial<User> = await this.prisma.user.create({
                 data,
