@@ -70,7 +70,7 @@ export class BookmarkController {
         await this.bookmarkService.deleteBookmark(bookmarkId);
 
         return response
-            .status(HttpStatus.NO_CONTENT)
+            .status(HttpStatus.NO_CONTENT) 
             .json();
       } catch (error: any) {
         return this.errorHandlerService
