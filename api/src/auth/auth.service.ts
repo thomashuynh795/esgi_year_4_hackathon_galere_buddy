@@ -15,21 +15,23 @@ export class AuthService {
 
     public async signUp(
         dto: SignUpRequestAuthDto
-    ): Promise<string> {
-        const hashedPassword: string = await hash(dto.password, 10);
-        const data = {
-            email: dto.email,
-            password: hashedPassword,
-            name: dto.name,
-            avatarUrl: "https://esgi-year-4-hackathon-galere-buddy.s3.eu-west-3.amazonaws.com/default_profile_picture.png"
-        };
-        const user: Partial<User> = await this.prisma.user.create({
-            data,
-            select: {
-                id: true,
-                email: true
-            }
-        });
+    ): Promise<Partial<User>> {
+        try {
+            const hashedPassword: string = await hash(dto.password, 10);
+            const data = {
+                email: dto.email,
+                password: hashedPassword,
+                firstname: dto.firstname,
+                name: dto.name,
+                avatarUrl: "https://esgi-year-4-hackathon-galere-buddy.s3.eu-west-3.amazonaws.com/default_profile_picture.png"
+            };
+            const user: Partial<User> = await this.prisma.user.create({
+                data,
+                select: {
+                    id: true,
+                    email: true
+                }
+            });
 
         if (!user) {
             throw new InternalServerErrorException("User creation failed.");
