@@ -11,6 +11,7 @@ import { MulterModule } from "@nestjs/platform-express";
 import { PostModule } from "./post/post.module";
 import { CommentModule } from "./comment/comment.module";
 import { NotificationGateway } from "./common/gateway/notification.gateway";
+import {TagModule} from "./tag/tag.module";
 @Module({
     imports: [
         AuthModule,
@@ -28,7 +29,8 @@ import { NotificationGateway } from "./common/gateway/notification.gateway";
             dest: "./uploads"
         }),
         PostModule,
-        CommentModule
+        CommentModule,
+        TagModule
     ],
     controllers: [],
     providers: [NotificationGateway]
