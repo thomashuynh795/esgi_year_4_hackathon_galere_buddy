@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty, IsString } from "class-validator";
 
-export class UpdateUserDto {
+export class UpdateUserRequestDto {
     @IsEmail()
     @IsNotEmpty()
     email?: string;

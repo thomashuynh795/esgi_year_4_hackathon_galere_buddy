@@ -10,6 +10,7 @@ import { LikeModule } from "./like/like.module";
 import { MulterModule } from "@nestjs/platform-express";
 import { PostModule } from "./post/post.module";
 import { CommentModule } from "./comment/comment.module";
+
 @Module({
     imports: [
         AuthModule,

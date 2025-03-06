@@ -5,6 +5,7 @@ import { ErrorHandlerService } from "src/common/utils/error-handler/error-handle
 import { ApiTags } from "@nestjs/swagger";
 import { SignUpAuthDto } from "./dto/sign-up-auth.dto";
 import { LogInAuthDto } from "./dto/log-in-auth.dto";
+import { SignUpResponseAuthDto } from "./dto/sign-up-response-auth.dto";
 
 @Controller("auth")
 @ApiTags("auth")
@@ -21,15 +22,9 @@ export class AuthController {
     ): Promise<Response> {
         try {
             await this.authService.signUp(dto);
-            return response
-                .status(HttpStatus.CREATED)
-                .json();
+            return response.status(HttpStatus.CREATED).json(new SignUpResponseAuthDto());
         } catch (error: any) {
-            return this.errorHandlerService
-                .getErrorForControllerLayer(
-                    error,
-                    response
-                );
+            return this.errorHandlerService.getErrorForControllerLayer(error, response);
         }
     }
 
@@ -40,15 +35,9 @@ export class AuthController {
     ): Promise<Response> {
         try {
             const jwt: string = await this.authService.logIn(dto);
-            return response
-                .status(HttpStatus.OK)
-                .json({ jwt });
+            return response.status(HttpStatus.OK).json({ jwt });
         } catch (error: any) {
-            return this.errorHandlerService
-                .getErrorForControllerLayer(
-                    error,
-                    response
-                );
+            return this.errorHandlerService.getErrorForControllerLayer(error, response);
         }
     }
 }

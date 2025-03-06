@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { v4 } from "uuid";
+import { CommonUtilsFileService } from "src/common/utils/common-utils-file/common-utils-file.service";
 
 @Injectable()
 export class AwsS3Service {
@@ -10,25 +11,26 @@ export class AwsS3Service {
     private readonly s3Client: S3Client = new S3Client({ region: this.AWS_S3_REGION });
 
     public constructor(
-        private readonly configService: ConfigService
+        private readonly configService: ConfigService,
+        private readonly commonUtilsFileService: CommonUtilsFileService
     ) { }
 
     public async upload(
-        pngFileBuffer: Buffer
+        file: Express.Multer.File
     ): Promise<{ fileId: string, fileUrl: string }> {
         try {
             const key: string = v4();
-            const fileId: string = `${key}.png`;
+            const fileExtension: string = this.commonUtilsFileService.extractExtension(file.originalname.toLowerCase());
+            const fileId: string = `${key}.${fileExtension}`;
             const fileUrl: string = `https://${this.AWS_S3_BUCKET_NAME}.s3.${this.AWS_S3_REGION}.amazonaws.com/${fileId}`;
             const command: PutObjectCommand = new PutObjectCommand({
                 Bucket: this.AWS_S3_BUCKET_NAME,
                 Key: fileId,
-                Body: pngFileBuffer,
-                ContentType: "image/png"
+                Body: file.buffer
             });
             await this.s3Client.send(command);
             return { fileId, fileUrl };
-        } catch (error: any) {
+        } catch (error: unknown) {
             throw error;
         }
     }

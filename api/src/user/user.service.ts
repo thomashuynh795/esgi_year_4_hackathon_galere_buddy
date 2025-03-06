@@ -2,7 +2,7 @@ import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { User } from "@prisma/client";
 import { hash } from "bcrypt";
-import { UpdateUserDto } from "./dto/update-user.dto";
+import { UpdateUserRequestDto } from "./dto/update-user-request.dto";
 
 @Injectable()
 export class UserService {
@@ -24,7 +24,8 @@ export class UserService {
 
     public async updateUser(
         userId: string,
-        dto: UpdateUserDto
+        dto: UpdateUserRequestDto,
+        profileImageFile: Express.Multer.File
     ): Promise<User> {
         try {
             if (dto.password)
