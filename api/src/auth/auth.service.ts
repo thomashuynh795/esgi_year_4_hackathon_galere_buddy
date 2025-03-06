@@ -15,8 +15,7 @@ export class AuthService {
 
     public async signUp(
         dto: SignUpRequestAuthDto
-    ): Promise<Partial<User>> {
-        try {
+    ): Promise<string> {
             const hashedPassword: string = await hash(dto.password, 10);
             const data = {
                 email: dto.email,
@@ -33,14 +32,13 @@ export class AuthService {
                 }
             });
 
-        if (!user) {
-            throw new InternalServerErrorException("User creation failed.");
-        }
+            if (!user) {
+                throw new InternalServerErrorException("User creation failed.");
+            }
 
-        return await this.jwtService.signAsync({
-            sub: user.id
-        });
-
+            return await this.jwtService.signAsync({
+                sub: user.id
+            });
     }
 
     public async logIn(
