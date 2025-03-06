@@ -2,6 +2,39 @@ import { ICard, NewCard } from "@/types/Card";
 import { IUser, NewUser } from "@/types/User";
 import { http } from "./init.service";
 
+
+/*
+export async function login(email: string, password: string): Promise<{ jwt: string; message: string; ok: boolean }> {
+    try {
+        // Effectue la requête
+        const response = await http.post(`/auth/log-in`, { email, password });
+
+        // Convertit la réponse en JSON
+        const data = await response.json(); // Ajouté ici
+
+        console.log("Login fetch response:", data);
+
+        // Déstructuration après conversion en JSON
+        const { jwt, message, ok } = data;
+
+        // Vérifie si l'authentification est réussie
+        if (ok) {
+            return { jwt, message, ok }; // Retourne directement l'objet destructuré
+        } else {
+            throw new Error(message || "Erreur inconnue lors de la connexion.");
+        }
+    } catch (error: any) {
+        console.error("Erreur de connexion:", error);
+        throw new Error(error.message || "Problème lors de la connexion.");
+    }
+}
+*/
+
+
+
+
+
+/*
 export async function getCards<T>(): Promise<T> {
   return await http.get<T>("/cards");
 }
@@ -24,7 +57,9 @@ export async function updateCardRequest(card: ICard) {
 export async function deleteCardRequest(id: string): Promise<{ ok: boolean }> {
   return await http.delete(`/cards/${id}`);
 }
+*/
 
+/*
 export async function getTodayQuizzRequest() {
   // const date = new Date();
   // date.setDate(10);
@@ -38,3 +73,5 @@ export async function answerQuestionRequest(
 ): Promise<{ ok: boolean }> {
   return await http.patch<ICard[]>(`/cards/${id}/answer`, body);
 }
+
+ */
