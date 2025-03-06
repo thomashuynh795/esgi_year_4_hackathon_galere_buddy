@@ -21,6 +21,7 @@ export class AuthService {
             const data = {
                 email: dto.email,
                 password: hashedPassword,
+                firstname: dto.firstname,
                 name: dto.name,
                 avatarUrl: "https://esgi-year-4-hackathon-galere-buddy.s3.eu-west-3.amazonaws.com/default_profile_picture.png"
             };
