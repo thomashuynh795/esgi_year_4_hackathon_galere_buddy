@@ -5,27 +5,34 @@ import { PrismaService } from "src/prisma/prisma.service";
 export class CommentGuard implements CanActivate {
   constructor(private readonly prisma: PrismaService) {}
 
-  async canActivate(
-    context: ExecutionContext
-  ): Promise<boolean> {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const user = request.user;
     const commentId = request.params.id;
+    const dto = request.body;
 
-    if (!user || !commentId) {
-      throw new ForbiddenException("You are not authorized to access this resource.");
+    if (!user) {
+      throw new ForbiddenException("You are not authenticated.");
     }
 
-    const comment = await this.prisma.comment.findUnique({
-      where: { id: commentId }
-    });
+    if (commentId && !dto) {
+      const comment = await this.prisma.comment.findUnique({
+        where: { id: commentId },
+      });
 
-    if (!comment) {
-      throw new ForbiddenException("Comment not found.");
+      if (!comment) {
+        throw new ForbiddenException("Comment not found.");
+      }
+
+      if (comment.authorId !== user.id) {
+        throw new ForbiddenException("You are not the author of this comment.");
+      }
     }
 
-    if (comment.authorId !== user.id) {
-      throw new ForbiddenException("You are not the author of this comment.");
+    if (!commentId && dto) {
+      if (dto.userId !== user.id) {
+        throw new ForbiddenException("You cannot create a comment for another user.");
+      }
     }
 
     return true;
