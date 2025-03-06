@@ -5,6 +5,7 @@ import {Button} from "@ui/atoms/Button/Button";
 import {Mail} from "@icons"
 import Link from "next/link";
 import {login} from "@/services/fetch.service";
+import {open} from "@/ui/organisms/Toast/Toast"
 
 
 export default function Login() {
@@ -19,25 +20,55 @@ export default function Login() {
         e.preventDefault();
         setError("");
 
+        console.log("email : ", email);
+        console.log("password : ", password);
         //vérify email
-        if(!emailRegges.test(email)) {
+        if (!emailRegges.test(email)) {
             setError("Votre email n'est pas valid");
-            return ;
+            return;
         }
 
         //vérify password
-        if(!passwordRegges.test(password)) {
+        if (!passwordRegges.test(password)) {
             setError("Le mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial.");
-            return ;
+            return;
         }
 
         //envoyer les données pour connecter l'utilisateur
-        try {
-            const userData: any = await login(email, password);
-            const token = userData.data;
 
-        }catch(err: any) {
-            setError("Une erreur est survenue lors de votre connexion.");
+        try {
+            const response = await fetch(
+                "http://localhost:3002/auth/log-in",
+                {   method: "POST",
+                    headers: {
+                    "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({email: email, password: password})
+                }
+            );
+            if (response.ok) {
+                open({
+                    title: "Connexion réussie.",
+                    duration: 1500,
+                    description: "",
+                    style: "success",
+
+                })
+            }else {
+                open(
+                    {
+                        title: "Oops, une erreur est survenue.",
+                        duration: 1500,
+                        description: "",
+                        style: "error"
+                    }
+                )
+            }
+
+        } catch (err: any) {
+            console.log(err);
+            setError("");
+
         }
     }
 
@@ -48,14 +79,15 @@ export default function Login() {
                 {error && <p className="text-red-500 text-sm text-center">{error}</p>}
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <TextField type="email" placeholder="Adresse email" className="w-full p-2 border rounded"
-                           onChange={(e) => setEmail(e.target.value)} required icon={<Mail/>} />
+                               onChange={(e) => setEmail(e.target.value)} required icon={<Mail/>}/>
                     <TextField type="password" placeholder="Mot de passe" className="w-full p-2 border rounded"
-                           onChange={(e) => setPassword(e.target.value)} required />
+                               onChange={(e) => setPassword(e.target.value)} required/>
                     <Button type="submit" className="w-full bg-black text-white p-2 rounded" label={"Se connecter"}/>
                 </form>
                 <p className="text-xs mt-4">
                     Pas encore de compte ?{"   "}
-                    <Link href="/register" className="text-blue-500 hover:underline text-right">Inscrivez-vous ici</Link>
+                    <Link href="/register" className="text-blue-500 hover:underline text-right">Inscrivez-vous
+                        ici</Link>
                 </p>
             </div>
             <div className="">
