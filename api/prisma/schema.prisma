@@ -18,7 +18,7 @@ model User {
 
     Post     Post[]
     Comment  Comment[]
-    Like     Like[]
+    Reaction Reaction[]
     Bookmark Bookmark[]
 }
 
@@ -34,11 +34,11 @@ model Post {
     updatedAt DateTime @updatedAt
     authorId  String
 
-    author   User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
-    comments Comment[]
-    likes    Like[]
-    tags     PostTag[]
-    Bookmark Bookmark[]
+    author    User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+    comments  Comment[]
+    reactions Reaction[]
+    tags      PostTag[]
+    Bookmark  Bookmark[]
 }
 
 model Comment {
@@ -52,10 +52,11 @@ model Comment {
     author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }
 
-model Like {
+model Reaction {
     id        String   @id @default(uuid())
     postId    String
     userId    String
+    reaction  String
     createdAt DateTime @default(now())
 
     post Post @relation(fields: [postId], references: [id], onDelete: Cascade)

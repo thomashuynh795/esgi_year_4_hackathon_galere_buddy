@@ -6,7 +6,7 @@ import { CommonModule } from "./common/common.module";
 import { ConfigModule } from "@nestjs/config";
 import { ScheduleModule } from "@nestjs/schedule";
 import { AwsS3Module } from "./aws-s3/aws-s3.module";
-import { LikeModule } from "./like/like.module";
+import { ReactionModule } from "./reaction/reaction.module";
 import { MulterModule } from "@nestjs/platform-express";
 import { PostModule } from "./post/post.module";
 import { CommentModule } from "./comment/comment.module";
@@ -20,7 +20,7 @@ import { CommentModule } from "./comment/comment.module";
             isGlobal: true
         }),
         ScheduleModule.forRoot(),
-        LikeModule,
+        ReactionModule,
         AwsS3Module,
         MulterModule.register({
             limits: { fileSize: 1000000 },
