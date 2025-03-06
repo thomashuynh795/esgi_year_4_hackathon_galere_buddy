@@ -13,9 +13,9 @@ export class HttpService {
     return HttpService._instance;
   }
 
-  private async request<T>(method: string, endpoint: string, body?: unknown): Promise<T> {
+  private async request(method: string, endpoint: string, body?: unknown): Promise<Response> {
     try {
-      const response = await fetch(`${this.baseUrl}${endpoint}`, {
+      const response :Response = await fetch(`${this.baseUrl}${endpoint}`, {
         method,
         headers: {
           "Content-Type": "application/json",
@@ -28,11 +28,11 @@ export class HttpService {
       }
 
       if (response.status === 204) {
-        return { ok: true } as T;
+        return { ...(await response.json()), ok:true};
       }
 
       const data = await response.json();
-      return data as T;
+      return data as Response;
 
     } catch (error) {
       console.error("Request failed:", error);
@@ -40,24 +40,24 @@ export class HttpService {
     }
   }
 
-  public async get<T>(endpoint: string): Promise<T> {
-    return this.request<T>("GET", endpoint);
+  public async get(endpoint: string): Promise<Response> {
+    return this.request("GET", endpoint);
   }
 
-  public async post<T>(endpoint: string, body?: unknown): Promise<T> {
-    return this.request<T>("POST", endpoint, body);
+  public async post(endpoint: string, body?: unknown): Promise<Response> {
+    return this.request("POST", endpoint, body);
   }
 
-  public async put<T>(endpoint: string, body?: unknown): Promise<T> {
-    return this.request<T>("PUT", endpoint, body);
+  public async put(endpoint: string, body?: unknown): Promise<Response> {
+    return this.request("PUT", endpoint, body);
   }
 
-  public async patch<T>(endpoint: string, body?: unknown): Promise<T> {
-    return this.request<T>("PATCH", endpoint, body);
+  public async patch(endpoint: string, body?: unknown): Promise<Response> {
+    return this.request("PATCH", endpoint, body);
   }
 
 
-  public async delete<T>(endpoint: string, body?: unknown): Promise<T> {
-    return this.request<T>("DELETE", endpoint, body);
+  public async delete(endpoint: string, body?: unknown): Promise<Response> {
+    return this.request("DELETE", endpoint, body);
   }
 }

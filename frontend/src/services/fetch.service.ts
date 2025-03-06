@@ -1,13 +1,21 @@
 import { ICard, NewCard } from "@/types/Card";
+import { IUser, NewUser } from "@/types/User";
 import { http } from "./init.service";
 
 export async function getCards<T>(): Promise<T> {
   return await http.get<T>("/cards");
 }
 
-export async function createCardRequest(card: NewCard) {
-  return await http.post<ICard>("/cards", card);
+export async function createUser(user: NewUser) {
+  try {
+    const response = await http.post<IUser>("/auth/sign-up", user);
+    return response;
+  } catch (error) {
+    console.error("Erreur lors de la création de l'utilisateur :", error);
+    throw error;  
+  }
 }
+
 
 export async function updateCardRequest(card: ICard) {
   return await http.put<ICard>(`/cards/${card.id}`, card);
