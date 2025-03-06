@@ -1,6 +1,7 @@
-import { Module } from "@nestjs/common";
+import { Global, Module } from "@nestjs/common";
 import { AwsS3Service } from "./aws-s3.service";
 
+@Global()
 @Module({
     controllers: [],
     providers: [AwsS3Service],

@@ -19,12 +19,16 @@ export class JwtStrategy extends PassportStrategy(Strategy, "jwt") {
     }
 
     public async validate(payload: { sub: string }): Promise<User> {
-        const user = await this.prisma.user.findUnique({
-            where: {
-                id: payload.sub
-            }
-        });
-        delete user.password;
-        return user;
+        try {
+            const user = await this.prisma.user.findUnique({
+                where: {
+                    id: payload.sub
+                }
+            });
+            delete user.password;
+            return user;
+        } catch (error) {
+            console.log("The JWT is invalid");
+        }
     }
 }

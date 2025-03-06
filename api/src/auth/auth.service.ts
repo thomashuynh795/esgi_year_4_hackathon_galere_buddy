@@ -3,8 +3,8 @@ import { PrismaService } from "src/prisma/prisma.service";
 import { hash, compare } from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
 import { User } from "@prisma/client";
-import { SignUpAuthDto } from "./dto/sign-up-auth.dto";
-import { LogInAuthDto } from "./dto/log-in-auth.dto";
+import { SignUpRequestAuthDto } from "./dto/sign-up-request-auth.dto";
+import { LogInAuthDto } from "./dto/log-in-request-auth.dto";
 
 @Injectable()
 export class AuthService {
@@ -14,14 +14,15 @@ export class AuthService {
     ) { }
 
     public async signUp(
-        dto: SignUpAuthDto
+        dto: SignUpRequestAuthDto
     ): Promise<Partial<User>> {
         try {
             const hashedPassword: string = await hash(dto.password, 10);
             const data = {
                 email: dto.email,
                 password: hashedPassword,
-                name: dto.name
+                name: dto.name,
+                avatarUrl: "https://esgi-year-4-hackathon-galere-buddy.s3.eu-west-3.amazonaws.com/default_profile_picture.png"
             };
             const user: Partial<User> = await this.prisma.user.create({
                 data,
