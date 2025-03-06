@@ -7,7 +7,9 @@ import { ErrorHandlerService } from "src/common/utils/error-handler/error-handle
 import { UpdateUserRequestDto } from "./dto/update-user-request.dto";
 import { CustomisedExpressRequest } from "src/common/models/customised-express-request";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
+@ApiTags("users")
 @Controller("users")
 export class UserController {
     public constructor(
@@ -17,6 +19,10 @@ export class UserController {
 
     @UseGuards(JwtGuard)
     @Get("me")
+    @ApiOperation({ summary: "Get the user's information" })
+    @ApiResponse({ status: 200, description: "The user's information" })
+    @ApiResponse({ status: 401, description: "Unauthorized" })
+    @ApiResponse({ status: 500, description: "Internal Server Error" })
     public async readMe(
         @Req() request: CustomisedExpressRequest,
         @Res() response: Response
@@ -33,6 +39,11 @@ export class UserController {
     @UseGuards(JwtGuard)
     @Patch("me")
     @UseInterceptors(FileInterceptor("avatarFile"))
+    @ApiOperation({ summary: "Update the user's information" })
+    @ApiResponse({ status: 200, description: "The updated user's information" })
+    @ApiResponse({ status: 400, description: "Bad Request" })
+    @ApiResponse({ status: 401, description: "Unauthorized" })
+    @ApiResponse({ status: 500, description: "Internal Server Error" })
     public async updateMe(
         @Req() request: CustomisedExpressRequest,
         @Body() dto: UpdateUserRequestDto,
@@ -58,6 +69,10 @@ export class UserController {
 
     @UseGuards(JwtGuard)
     @Delete("me")
+    @ApiOperation({ summary: "Delete the user" })
+    @ApiResponse({ status: 200, description: "The deleted user's information" })
+    @ApiResponse({ status: 401, description: "Unauthorized" })
+    @ApiResponse({ status: 500, description: "Internal Server Error" })
     public async deleteMe(
         @Req() request: CustomisedExpressRequest,
         @Res() response: Response
