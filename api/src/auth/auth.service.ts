@@ -1,10 +1,10 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from "@nestjs/common";
-import { PrismaService } from "src/prisma/prisma.service";
-import { hash, compare } from "bcrypt";
-import { JwtService } from "@nestjs/jwt";
-import { User } from "@prisma/client";
-import { SignUpRequestAuthDto } from "./dto/sign-up-request-auth.dto";
-import { LogInAuthDto } from "./dto/log-in-request-auth.dto";
+import {BadRequestException, Injectable, InternalServerErrorException} from "@nestjs/common";
+import {PrismaService} from "src/prisma/prisma.service";
+import {compare, hash} from "bcrypt";
+import {JwtService} from "@nestjs/jwt";
+import {User} from "@prisma/client";
+import {SignUpRequestAuthDto} from "./dto/sign-up-request-auth.dto";
+import {LogInAuthDto} from "./dto/log-in-request-auth.dto";
 
 @Injectable()
 export class AuthService {
@@ -15,8 +15,7 @@ export class AuthService {
 
     public async signUp(
         dto: SignUpRequestAuthDto
-    ): Promise<Partial<User>> {
-        try {
+    ): Promise<string> {
             const hashedPassword: string = await hash(dto.password, 10);
             const data = {
                 email: dto.email,
@@ -33,33 +32,30 @@ export class AuthService {
                 }
             });
 
-            if (!user)
+            if (!user) {
                 throw new InternalServerErrorException("User creation failed.");
+            }
 
-            return user;
-        } catch (error: any) {
-            throw error;
-        }
+            return await this.jwtService.signAsync({
+                sub: user.id
+            });
     }
 
     public async logIn(
         dto: LogInAuthDto
     ): Promise<string> {
-        try {
             const user: User = await this.prisma.user.findUnique({
                 where: {
                     email: dto.email
                 }
             });
 
-            if (!user || !await compare(dto.password, user.password))
+            if (!user || !await compare(dto.password, user.password)) {
                 throw new BadRequestException("Credentials are not valid.");
+            }
 
             return await this.jwtService.signAsync({
                 sub: user.id
             });
-        } catch (error: any) {
-            throw error;
-        }
     }
 }
