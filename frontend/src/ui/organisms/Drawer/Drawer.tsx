@@ -42,7 +42,7 @@ export function Root(props: DrawerProps) {
           className={"fixed left-0 top-0 bottom-0 right-0 z-10 flex flex-col p-8 items-end justify-center"}>
           <div
             className={
-              "w-full max-w-[30rem] flex flex-col h-full border-solid border-[1px] border-gray-200 bg-white z-10 rounded-2xl shadow-modal"
+              "w-full max-w-[30rem] flex flex-col border-solid border-[1px] border-gray-200 bg-white z-10 rounded-2xl shadow-modal"
             }>
             <VisuallyHidden>
               <Dialog.Title></Dialog.Title>

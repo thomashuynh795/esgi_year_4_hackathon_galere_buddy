@@ -1,30 +1,46 @@
-"use client"
-import React from "react"
-import { TextField } from "@/ui/atoms/Inputs/TextField/TextField"
-import { Button } from "@/ui/atoms/Button/Button"
-import { Stack } from "@/ui/layouts/Stack/Stack"
-import { Mail } from "lucide-react"
+"use client";
+import React, { useState } from "react";
+import FirstRegisterForm from "./FirstRegisterForm";
+import SecondRegisterForm from "./SecondRegisterForm";
 
-export default function RegisterForm(){
-    return(
-        <>           
-            <div className="p-[48px] max-w-[445px] m-auto">
-                <h2 className="font-bold">GalèreBuddy</h2>
-                <p>Partagez vos anecdotes</p>
-                <form className="mt-5 p-5 border rounded-md">
-                    <p>Je crée mon profil en quelques étapes</p>
-                    <Stack className="mt-5" direction={"col"} gapy={5}>
-                        <span className="flex">
-                            <TextField type={"text"} placeholder="Nom" required/>
-                            <TextField type={"text"}  placeholder="Prénom" required/>
-                        </span>
-                        <TextField type={"email"}  placeholder="Adresse email" icon={<Mail/>} required/>
-                        <TextField type={"password"}  placeholder="Mot de passe" required/>
-                        <Button className="py-3 mt-5" label={"Suivant"} type="submit"/>
-                    </Stack>
-                    <p>Me créer un compte</p>
-                </form>
-            </div>
-        </>
-    )
+export default function RegisterForm() {
+  const [step, setStep] = useState(1);
+
+   const [formData, setFormData] = useState({
+    nom: "",
+    prenom: "",
+    email: "",
+    password: "",
+    profilePicture:"/img/profilePicture.png"
+  });
+
+  return (
+    <div className="h-screen flex flex-col items-center justify-center">
+      <span className="flex flex-col items-center text-center">
+        <h2 className="font-bold">GalèreBuddy</h2>
+        <p>Partagez vos anecdotes</p>
+      </span>
+
+      <div className="flex items-center justify-center w-full">
+        <form className="mt-5 p-5 border border-gray-300 rounded-md">
+          <p className="text-center">Je crée mon profil en quelques étapes</p>
+
+           {step === 1 && (
+            <FirstRegisterForm
+              onSuccess={() => setStep(2)}
+              formData={formData}
+              setFormData={setFormData}
+            />
+          )}
+          {step === 2 && <SecondRegisterForm goBack={() => setStep(1)} />}
+
+          <p className="text-center">Me créer un compte</p>
+        </form>
+      </div>
+
+      <p className="mt-5 text-center mx-auto">
+        Copyright 2025 GalèreBuddy. Tous les droits réservés
+      </p>
+    </div>
+  );
 }
