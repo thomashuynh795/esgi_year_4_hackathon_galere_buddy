@@ -1,7 +1,14 @@
+import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty, IsString } from "class-validator";
 
 export class SignUpResponseAuthDto {
+    @ApiProperty()
     @IsString()
     @IsNotEmpty()
-    message: string = "User created successfully";
+    jwt: string;
+
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    message: string;
 }

@@ -8,6 +8,7 @@ import { UpdateUserRequestDto } from "./dto/update-user-request.dto";
 import { CustomisedExpressRequest } from "src/common/models/customised-express-request";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { UpdateUserResponseDto } from "./dto/update-user-response.dto";
 
 @ApiTags("users")
 @Controller("users")
@@ -40,7 +41,7 @@ export class UserController {
     @Patch("me")
     @UseInterceptors(FileInterceptor("avatarFile"))
     @ApiOperation({ summary: "Update the user's information" })
-    @ApiResponse({ status: 200, description: "The updated user's information" })
+    @ApiResponse({ status: 200, description: "The updated user's information", type: UpdateUserResponseDto })
     @ApiResponse({ status: 400, description: "Bad Request" })
     @ApiResponse({ status: 401, description: "Unauthorized" })
     @ApiResponse({ status: 500, description: "Internal Server Error" })
@@ -61,7 +62,7 @@ export class UserController {
         try {
             const updatedUser: Omit<User, "password"> =
                 await this.userService.updateUser(request.user.id, dto, avatarFile);
-            return response.status(200).json({ updatedUser });
+            return response.status(200).json(updatedUser);
         } catch (error: any) {
             return this.errorHandlerService.getErrorForControllerLayer(error, response);
         }

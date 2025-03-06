@@ -3,8 +3,8 @@ import { PrismaService } from "src/prisma/prisma.service";
 import { hash, compare } from "bcrypt";
 import { JwtService } from "@nestjs/jwt";
 import { User } from "@prisma/client";
-import { SignUpAuthDto } from "./dto/sign-up-auth.dto";
-import { LogInAuthDto } from "./dto/log-in-auth.dto";
+import { SignUpRequestAuthDto } from "./dto/sign-up-request-auth.dto";
+import { LogInAuthDto } from "./dto/log-in-request-auth.dto";
 
 @Injectable()
 export class AuthService {
@@ -14,7 +14,7 @@ export class AuthService {
     ) { }
 
     public async signUp(
-        dto: SignUpAuthDto
+        dto: SignUpRequestAuthDto
     ): Promise<Partial<User>> {
         try {
             const hashedPassword: string = await hash(dto.password, 10);

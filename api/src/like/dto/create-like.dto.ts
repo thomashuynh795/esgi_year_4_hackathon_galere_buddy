@@ -1,1 +1,1 @@
-export class CreateLikeDto {}
+export class CreateLikeDto { }
