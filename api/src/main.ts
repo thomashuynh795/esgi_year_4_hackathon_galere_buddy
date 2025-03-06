@@ -4,7 +4,7 @@ import { INestApplication, ValidationPipe } from "@nestjs/common";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 
 const initSwagger = (app: INestApplication) => {
-    const config = new DocumentBuilder().setTitle("Cinema API").build();
+    const config = new DocumentBuilder().setTitle("GalereBuddy API").build();
 
     const document = SwaggerModule.createDocument(app, config);
 
