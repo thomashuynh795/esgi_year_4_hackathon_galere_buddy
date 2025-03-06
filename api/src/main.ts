@@ -4,7 +4,11 @@ import { INestApplication, ValidationPipe } from "@nestjs/common";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 
 const initSwagger = (app: INestApplication) => {
-    const config = new DocumentBuilder().setTitle("GalereBuddy API").build();
+    const config = new DocumentBuilder()
+        .setTitle("Galere Buddy")
+        .setDescription("API to share professional anecdotes")
+        .setVersion("1.0")
+        .build();
 
     const document = SwaggerModule.createDocument(app, config);
 

@@ -2,12 +2,14 @@ import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { User } from "@prisma/client";
 import { hash } from "bcrypt";
-import { UpdateUserDto } from "./dto/update-user.dto";
+import { UpdateUserRequestDto } from "./dto/update-user-request.dto";
+import { AwsS3Service } from "src/aws-s3/aws-s3.service";
 
 @Injectable()
 export class UserService {
     public constructor(
-        private readonly prisma: PrismaService
+        private readonly prisma: PrismaService,
+        private readonly awsS3Service: AwsS3Service
     ) { }
 
     public async getUser(userId: string) {
@@ -24,11 +26,24 @@ export class UserService {
 
     public async updateUser(
         userId: string,
-        dto: UpdateUserDto
+        dto: UpdateUserRequestDto,
+        avatarFile?: Express.Multer.File
     ): Promise<User> {
         try {
+            const userToUpdate: User = await this.prisma.user.findUnique({
+                where: { id: userId }
+            });
+
+            if (!userToUpdate)
+                throw new InternalServerErrorException("User not found");
+
             if (dto.password)
                 dto.password = await hash(dto.password, 10);
+
+            if (avatarFile) {
+                const { fileUrl } = await this.awsS3Service.upload(avatarFile);
+                dto.avatarUrl = fileUrl;
+            }
 
             const user: User = await this.prisma.user.update({
                 where: { id: userId },
