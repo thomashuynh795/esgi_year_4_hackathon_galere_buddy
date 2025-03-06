@@ -1,5 +1,6 @@
 import { ICard, NewCard } from "@/types/Card";
 import { http } from "./init.service";
+import { IPost } from "@/types/Post";
 
 export async function getCards<T>(): Promise<T> {
   return await http.get<T>("/cards");
@@ -7,6 +8,11 @@ export async function getCards<T>(): Promise<T> {
 
 export async function createCardRequest(card: NewCard) {
   return await http.post<ICard>("/cards", card);
+}
+
+// Create a new post
+export async function createPost(post: Post) {
+  return await http.post<IPost>("/posts", post);
 }
 
 export async function updateCardRequest(card: ICard) {
