@@ -1,6 +1,12 @@
-import { ICard, NewCard } from "@/types/Card";
+//import { ICard, NewCard } from "@/types/Card";
 import { http } from "./init.service";
 
+
+export async function login(email: string, password: string) {
+    return await http.post(`/auth/log-in`, {email, password});
+}
+
+/*
 export async function getCards<T>(): Promise<T> {
   return await http.get<T>("/cards");
 }
@@ -16,11 +22,9 @@ export async function updateCardRequest(card: ICard) {
 export async function deleteCardRequest(id: string): Promise<{ ok: boolean }> {
   return await http.delete(`/cards/${id}`);
 }
+*/
 
-export async function login(email: string, password: string) {
-  return await http.post(`/login`, {email, password});
-}
-
+/*
 export async function getTodayQuizzRequest() {
   // const date = new Date();
   // date.setDate(10);
@@ -34,3 +38,5 @@ export async function answerQuestionRequest(
 ): Promise<{ ok: boolean }> {
   return await http.patch<ICard[]>(`/cards/${id}/answer`, body);
 }
+
+ */

@@ -14,7 +14,8 @@ export default function Login() {
     const emailRegges = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const passwordRegges = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError("");
 
@@ -31,7 +32,13 @@ export default function Login() {
         }
 
         //envoyer les données pour connecter l'utilisateur
-        login(email, password)
+        try {
+            const userData: any = await login(email, password);
+            const token = userData.data;
+
+        }catch(err: any) {
+            setError("Une erreur est survenue lors de votre connexion.");
+        }
     }
 
     return (
