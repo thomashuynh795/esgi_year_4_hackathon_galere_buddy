@@ -1,8 +1,9 @@
-import { Controller, Get, HttpStatus, Param, Res } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Param, Post, Res } from "@nestjs/common";
 import { PostService } from "./post.service";
 import { ErrorHandlerService } from "src/common/utils/error-handler/error-handler.service";
 import { CommentService } from "src/comment/comment.service";
 import { Response } from "express";
+import { CreateCommentDto } from "src/comment/dto/create-comment.dto";
 
 @Controller("post")
 export class PostController {
@@ -23,6 +24,28 @@ export class PostController {
             return response
                 .status(HttpStatus.OK)
                 .json(comments);
+        } catch (error: any) {
+            return this.errorHandlerService
+            .getErrorForControllerLayer(
+                error,
+                response
+            );
+        }
+    }
+
+    @Post(":id/comments")
+    public async createComment(
+        @Param("id") postId: string,
+        @Body() createCommentDto: CreateCommentDto,
+        @Res() response: Response
+    ): Promise<Response> {
+        try {
+            createCommentDto.postId = postId;
+            const comment = await this.commentService.createComment(createCommentDto);
+
+            return response
+                .status(HttpStatus.CREATED)
+                .json(comment);
         } catch (error: any) {
             return this.errorHandlerService
             .getErrorForControllerLayer(

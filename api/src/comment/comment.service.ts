@@ -7,7 +7,7 @@ import { Comment } from "@prisma/client";
 export class CommentService {
   public constructor(private readonly prisma: PrismaService) {}
 
-  public async createComment(dto: CreateCommentDto): Promise<void> {
+  public async createComment(dto: CreateCommentDto): Promise<Comment> {
     try {
       const post = await this.prisma.post.findUnique({
         where: { id: dto.postId }
@@ -25,13 +25,15 @@ export class CommentService {
         throw new BadRequestException("Author not found.");
       }
 
-      await this.prisma.comment.create({
+      const comment = await this.prisma.comment.create({
         data: {
           content: dto.content,
           postId: dto.postId,
           authorId: dto.authorId
         }
       });
+
+      return comment;
     } catch (error: any) {
       throw new InternalServerErrorException("Failed to create comment.");
     }
