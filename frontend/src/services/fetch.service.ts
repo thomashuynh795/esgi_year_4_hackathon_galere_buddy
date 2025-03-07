@@ -17,6 +17,10 @@ export async function getAllPost() {
   return await http.get<IPost[]>( "/post");
 }
 
+export async function getLikedPost() {
+  return await http.get<[]>( "/bookmarks");
+}
+
 export async function getPost() {
   return await http.get<IPost[]>( "/post");
 }
