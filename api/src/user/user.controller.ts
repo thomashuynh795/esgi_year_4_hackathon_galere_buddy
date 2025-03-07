@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Patch, Res, UseGuards, Req, MaxFileSizeValidator, FileTypeValidator, ParseFilePipe, UploadedFile, UseInterceptors } from "@nestjs/common";
-import { JwtGuard } from "src/auth/guard/jwt.guard";
+import { JwtAuthGuard } from "src/auth/guard/jwtAuthGuard";
 import { UserService } from "./user.service";
 import { User } from "@prisma/client";
 import { Response } from "express";
@@ -18,7 +18,7 @@ export class UserController {
         private readonly errorHandlerService: ErrorHandlerService
     ) { }
 
-    @UseGuards(JwtGuard)
+    @UseGuards(JwtAuthGuard)
     @Get("me")
     @ApiOperation({ summary: "Get the user's information" })
     @ApiResponse({ status: 200, description: "The user's information" })
@@ -37,7 +37,7 @@ export class UserController {
         }
     }
 
-    @UseGuards(JwtGuard)
+    @UseGuards(JwtAuthGuard)
     @Patch("me")
     @UseInterceptors(FileInterceptor("avatarFile"))
     @ApiOperation({ summary: "Update the user's information" })
@@ -68,7 +68,7 @@ export class UserController {
         }
     }
 
-    @UseGuards(JwtGuard)
+    @UseGuards(JwtAuthGuard)
     @Delete("me")
     @ApiOperation({ summary: "Delete the user" })
     @ApiResponse({ status: 200, description: "The deleted user's information" })

@@ -1,4 +1,4 @@
-import {JwtGuard} from "../auth/guard/jwt.guard";
+import {JwtAuthGuard} from "../auth/guard/jwtAuthGuard";
 import {CreatePostDto} from "./dto/create-post.dto";
 import {PostService} from "./post.service";
 import {CustomisedExpressRequest} from "../common/models/customised-express-request";
@@ -42,21 +42,21 @@ export class PostController {
     }
 
     @Post()
-    @UseGuards(JwtGuard)
+    @UseGuards(JwtAuthGuard)
     async create(@Body() createPostDto: CreatePostDto,
                  @Req() req: CustomisedExpressRequest) {
         return this.postService.create(createPostDto,req.user.id );
     }
 
     @Delete(":id")
-    @UseGuards(JwtGuard)
+    @UseGuards(JwtAuthGuard)
     async delete(@Param("id") id: string,
                  @Req() req: CustomisedExpressRequest) {
         return this.postService.delete(id,req.user.id);
     }
 
     @Patch(":id")
-    @UseGuards(JwtGuard)
+    @UseGuards(JwtAuthGuard)
     async update(@Param("id") id: string,
                  @Body() updatePostDto: UpdatePostDto,
                  @Req() req: CustomisedExpressRequest) {
@@ -64,7 +64,7 @@ export class PostController {
     }
 
 
-    @UseGuards(JwtGuard, RolesGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.ADMIN, Role.MEMBER)
     @Get(":id/comments")
     public async getCommentsOfPost(
@@ -86,17 +86,23 @@ export class PostController {
         }
     }
 
-    @UseGuards(JwtGuard, RolesGuard, CommentGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard, CommentGuard)
     @Roles(Role.ADMIN, Role.MEMBER)
     @Post(":id/comments")
     public async commentPost(
         @Param("id") postId: string,
         @Body() createCommentDto: CreateCommentDto,
+        @Req() req: CustomisedExpressRequest,
         @Res() response: Response
     ): Promise<Response> {
         try {
-            createCommentDto.postId = postId;
-            const comment = await this.commentService.createComment(createCommentDto);
+
+            const commentData = {
+                content: createCommentDto.content,
+                postId: postId,
+                authorId: req.user.id
+            };
+            const comment = await this.commentService.createComment(commentData);
 
             return response
                 .status(HttpStatus.CREATED)
@@ -110,7 +116,7 @@ export class PostController {
         }
     }
 
-    @UseGuards(JwtGuard, RolesGuard, ReactionGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard, ReactionGuard)
     @Roles(Role.ADMIN, Role.MEMBER)
     @Post(":id/reactions")
     public async reactPost(
@@ -134,7 +140,7 @@ export class PostController {
         }
     }
 
-    @UseGuards(JwtGuard, RolesGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.ADMIN, Role.MEMBER)
     @Get(":id/reactions")
     public async getReactionsOfPost(

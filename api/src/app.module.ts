@@ -11,9 +11,11 @@ import { MulterModule } from "@nestjs/platform-express";
 import { PostModule } from "./post/post.module";
 import { CommentModule } from "./comment/comment.module";
 import { NotificationGateway } from "./common/gateway/notification.gateway";
-
 import { BookmarkModule } from "./bookmark/bookmark.module";
 import { TagModule } from "./tag/tag.module";
+import { ParticipantModule } from "./participant/participant.module";
+import {BadgeModule} from "./badge/badge.module";
+import {InitiativeModule} from "./initiative/initiative.module";
 
 @Module({
     imports: [
@@ -34,7 +36,11 @@ import { TagModule } from "./tag/tag.module";
         PostModule,
         CommentModule,
         TagModule,
-        BookmarkModule
+        BookmarkModule,
+        ParticipantModule,
+        InitiativeModule,
+        BadgeModule,
+        PrismaModule
 
     ],
     controllers: [],

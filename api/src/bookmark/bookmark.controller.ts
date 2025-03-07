@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Res, UseGuards } from "@nestjs/common";
 import { BookmarkService } from "./bookmark.service";
 import { ErrorHandlerService } from "src/common/utils/error-handler/error-handler.service";
-import { JwtGuard } from "src/auth/guard/jwt.guard";
+import { JwtAuthGuard } from "src/auth/guard/jwtAuthGuard";
 import { RolesGuard } from "src/auth/guard/roles.guard";
 import { Roles } from "src/auth/decorator/roles.decorator";
 import { Role } from "@prisma/client";
@@ -15,7 +15,7 @@ export class BookmarkController {
         private readonly errorHandlerService: ErrorHandlerService
     ) { }
 
-    @UseGuards(JwtGuard, RolesGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.ADMIN, Role.MEMBER)
     @Get(":userId")
     public async getBookmarksOfUser(
@@ -37,7 +37,7 @@ export class BookmarkController {
       }
     }
 
-    @UseGuards(JwtGuard, RolesGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.ADMIN, Role.MEMBER)
     @Post()
     public async addBookmark(
@@ -59,7 +59,7 @@ export class BookmarkController {
       }
     }
 
-    @UseGuards(JwtGuard, RolesGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.ADMIN, Role.MEMBER)
     @Delete(":bookmarkId")
     public async deleteBookmark(

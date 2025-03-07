@@ -1,10 +1,10 @@
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DEVELOPMENT_DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DEVELOPMENT_DATABASE_URL")
 }
 
 enum Role {
@@ -13,94 +13,173 @@ enum Role {
 }
 
 enum React {
-    LIKE
-    LAUGH
-    CRY
+  LIKE
+  LAUGH
+  CRY
+}
+
+enum InitiativeType {
+  ARTICLE
+  TRAINING
+  PROJECT
+  MEETING
+  OTHER
+}
+
+enum InitiativeStatus {
+  PROPOSED
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum BadgeType {
+  INITIATOR
+  COLLABORATOR
+  ACHIEVER
+  PROBLEM_SOLVER
+}
+
+model Initiative {
+  id          String           @id @default(uuid())
+  title       String
+  description String
+  type        InitiativeType
+  status      InitiativeStatus @default(PROPOSED)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  deadline    DateTime?
+  outcome     String?
+
+  postId String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  creatorId    String
+  creator      User          @relation("InitiativeCreator", fields: [creatorId], references: [id])
+  participants Participant[]
+}
+
+model Participant {
+  id           String   @id @default(uuid())
+  initiativeId String
+  userId       String
+  joinedAt     DateTime @default(now())
+
+  initiative Initiative @relation(fields: [initiativeId], references: [id], onDelete: Cascade)
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([initiativeId, userId])
+}
+
+model Badge {
+  id          String    @id @default(uuid())
+  type        BadgeType
+  name        String
+  description String
+  imageUrl    String
+
+  userBadges UserBadge[]
+}
+
+model UserBadge {
+  id       String   @id @default(uuid())
+  userId   String
+  badgeId  String
+  earnedAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge Badge @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, badgeId])
 }
 
 model User {
-    id        String   @id @default(uuid())
-    email     String   @unique
-    password  String
-    firstname String
-    name      String
-    avatarUrl String?  
-    role      Role     @default(MEMBER)
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  id           String   @id @default(uuid())
+  email        String   @unique
+  password     String
+  firstname    String
+  name         String
+  avatarUrl    String?
+  role         Role     @default(MEMBER)
+  impactPoints Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-    Post     Post[]
-    Comment  Comment[]
-    Reaction Reaction[]
-    Bookmark Bookmark[]
+  Post               Post[]
+  Comment            Comment[]
+  Reaction           Reaction[]
+  Bookmark           Bookmark[]
+  createdInitiatives Initiative[]  @relation("InitiativeCreator")
+  participations     Participant[]
+  userBadges         UserBadge[]
 }
 
 model Post {
-    id        String   @id @default(uuid())
-    title     String
-    imageUrl  String?
-    problem   String
-    solution  String?
-    advice    String
-    lesson    String?
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    authorId  String
+  id        String   @id @default(uuid())
+  title     String
+  imageUrl  String?
+  problem   String
+  solution  String?
+  advice    String
+  lesson    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  authorId  String
 
-    author    User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
-    comments  Comment[]
-    reactions Reaction[]
-    tags      PostTag[]
-    Bookmark  Bookmark[]
+  author     User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  comments   Comment[]
+  reactions  Reaction[]
+  tags       PostTag[]
+  Bookmark   Bookmark[]
+  Initiative Initiative[]
 }
 
 model Comment {
-    id        String   @id @default(uuid())
-    content   String
-    postId    String
-    authorId  String
-    createdAt DateTime @default(now())
+  id        String   @id @default(uuid())
+  content   String
+  postId    String
+  authorId  String
+  createdAt DateTime @default(now())
 
-    post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
-    author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
 }
 
 model Reaction {
-    id        String   @id @default(uuid())
-    postId    String
-    userId    String
-    react     React
-    createdAt DateTime @default(now())
+  id        String   @id @default(uuid())
+  postId    String
+  userId    String
+  react     React
+  createdAt DateTime @default(now())
 
-    post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    @@unique([postId, userId])
+  @@unique([postId, userId])
 }
 
 model Bookmark {
-    id        String   @id @default(uuid())
-    postId    String
-    userId    String
-    createdAt DateTime @default(now())
+  id        String   @id @default(uuid())
+  postId    String
+  userId    String
+  createdAt DateTime @default(now())
 
-    post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    @@unique([postId, userId])
+  @@unique([postId, userId])
 }
 
 model Tag {
-    id    String    @id @default(uuid())
-    name  String    @unique
-    posts PostTag[]
+  id    String    @id @default(uuid())
+  name  String    @unique
+  posts PostTag[]
 }
 
 model PostTag {
-    postId String
-    tagId  String
-    post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
-    tag    Tag    @relation(fields: [tagId], references: [id])
+  postId String
+  tagId  String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag    Tag    @relation(fields: [tagId], references: [id])
 
-    @@id([postId, tagId])
+  @@id([postId, tagId])
 }

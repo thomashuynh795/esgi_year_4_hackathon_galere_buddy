@@ -9,29 +9,28 @@ export class CommentGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const user = request.user;
     const commentId = request.params.commentId;
-    const dto = request.body;
 
     if (!user) {
       throw new ForbiddenException("You are not authenticated.");
     }
-    
+
+    // Les admins ont toujours accès
     if (user.role === "ADMIN") {
       return true;
     }
 
-    if (commentId && Object.keys(dto).length === 0) {
+    // Cas de modification/suppression d'un commentaire existant
+    if (commentId) {
       const comment = await this.prisma.comment.findUnique({
         where: { id: commentId }
       });
 
+      if (!comment) {
+        throw new ForbiddenException("Comment not found.");
+      }
+
       if (comment.authorId !== user.id) {
         throw new ForbiddenException("You are not the author of this comment.");
-      }
-    }
-
-    if (!commentId && dto) {
-      if (dto.authorId !== user.id) {
-        throw new ForbiddenException("You cannot create a comment for another user.");
       }
     }
 
