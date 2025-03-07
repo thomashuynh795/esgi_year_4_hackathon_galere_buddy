@@ -1,5 +1,5 @@
-import {IsEnum, IsNotEmpty, IsString} from "class-validator";
-import {BadgeType} from "@prisma/client";
+import { IsEnum, IsNotEmpty, IsString } from "class-validator";
+import { BadgeType } from "@prisma/client";
 
 export class CreateBadgeDto {
     @IsEnum(BadgeType)
