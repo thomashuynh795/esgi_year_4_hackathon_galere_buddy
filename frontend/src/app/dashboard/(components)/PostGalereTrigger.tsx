@@ -6,13 +6,36 @@ import { IPost, NewPost } from "@/types/Post";
 import { ImagePlay, ImagePlus, Video } from "lucide-react";
 import { Stack } from "@/ui/layouts/Stack/Stack";
 import { ButtonIcon } from "@/ui/atoms/ButtonIcon/ButtonIcon";
+import { createPost } from "@/services/fetch.service";
+import { open as opentToast } from "@ui/organisms/Toast/Toast";
 
 export function PostGalereTrigger() {
-    const [formRef, setFormRef] = useState();
+    const [formRef, setFormRef] = useState<HTMLFormElement>();
       const [isLoading, setIsLoading] = useState(false);
       const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-    const createPost = (post: NewPost) => {};
+    const create = async (post: NewPost) => {
+       try {
+         const response = await createPost(post);
+        
+         console.log(response);
+
+         opentToast({
+          title: "Success",
+          description: "Post créer avec succèss",
+          style: "success"
+        
+         })
+       } catch (error) {
+         console.error("Erreur lors de la création du post :", error);
+                  
+         opentToast({
+           title: "Error",
+           description: "Une erreur c'est produite lors de la création de la galère",
+           style: "error",
+         });
+       }
+    };
 
     return (
       <Drawer.Root title="Poster une galère">
@@ -43,7 +66,9 @@ export function PostGalereTrigger() {
         </Drawer.Footer> */}
 
         <Drawer.Action>
-          <Button label="Poster" variant={"rounded"} type={"button"} />
+          <Button label="Poster" variant={"rounded"} type={"button"} onClick={() => {
+            formRef?.requestSubmit();
+          }}/>
         </Drawer.Action>
       </Drawer.Root>
     );

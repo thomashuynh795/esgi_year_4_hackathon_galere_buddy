@@ -3,6 +3,7 @@ import { TextField } from "@/ui/atoms/Inputs/TextField/TextField";
 import { Stack } from "@/ui/layouts/Stack/Stack";
 import React, {useEffect, useState} from "react";
 import { Image, Play, Video } from "lucide-react";
+import { NewPost } from "@/types/Post";
 
 
 interface PostGalereFormProps {
@@ -13,19 +14,18 @@ interface PostGalereFormProps {
 export default function PostGalereForm(props: PostGalereFormProps) {
   const { handleFormRef, handleSubmit } = props;
   const formRef = React.useRef(null);
-  const {imgUrl, setImgUrl} = React.useState("");
+  const [imgUrl, setImgUrl]= React.useState("");
+  const [pst, setPst] = React.useState({});
 
   const onSubmit = (formdata: FormData) => {
     if (!formRef.current) return;
 
-    const post = {
-      title: formdata.get("title") || "",
-      problem: formdata.get("problem") || "",
-      solution: formdata.get("solution") || "",
-      lesson: formdata.get("lesson") || "",
-      imageUrl: imgUrl
+    const post: NewPost = {
+      ...pst,
+      imageUrl: imgUrl,
     };
 
+    console.log(post);
     handleSubmit(post);
   };
 
@@ -40,40 +40,56 @@ export default function PostGalereForm(props: PostGalereFormProps) {
       <Stack direction="col">
         <Stack direction="col">
           <Stack direction="col">
-            <TextField label="Titre" type={"text"} name={""}/>
+            <TextField label="Titre" type={"text"} name={"title"} onChange={(e) => {
+              setPst(prev =>  ({...prev, title: e.target.value}));
+            }}/>
           </Stack>
 
           <Stack direction="col">
             <label>
               Problème
-              <TextBox name={"problem"}/>
+              <TextBox name={"problem"}  onChange={(e) => {
+              setPst(prev =>  ({...prev, problem: e.target.value}));
+            }}/>
             </label>
           </Stack>
 
           <Stack direction="col">
             <label>
               Solution
-              <TextBox name={"solution"}/>
+              <TextBox name={"solution"} onChange={(e) => {
+              setPst(prev =>  ({...prev, solution: e.target.value}));
+            }}/>
             </label>
           </Stack>
 
           <Stack direction="col">
             <label>
               Conseil
-              <TextBox name={"advice"}/>
+              <TextBox name={"advice"} onChange={(e) => {
+              setPst(prev =>  ({...prev, advice: e.target.value}));
+            }}/>
             </label>
           </Stack>
 
           <Stack direction="col">
             <label>
               Leçon
-              <TextBox name={"lesson"}/>
+              <TextBox name={"lesson"} onChange={(e) => {
+              setPst(prev =>  ({...prev, lesson: e.target.value}));
+            }}/>
             </label>
           </Stack>
         </Stack>
       </Stack>
 
-      <MediaUploader handleGif={(gif: any) => setImgUrl(gif.media[0].tinygif.url)}/>
+      <MediaUploader handleGif={(gif: any) => {
+        console.log(gif);
+
+        if(gif && gif.url) {
+          setImgUrl(gif.url);
+        }
+      }}/>
     </form>
   );
 }
@@ -181,8 +197,11 @@ const MediaUploader = (props: {handleGif: CallableFunction}) => {
       url: gif.media[0].gif.url,
     });
     setShowGifModal(false);
-    props.handleGif(gif)
   };
+
+  useEffect(() => {
+    props.handleGif(selectedMedia);
+  }, [selectedMedia])
 
   // Effet pour déclencher la recherche lors de la modification du terme de recherche
   useEffect(() => {

@@ -23,11 +23,9 @@ export function Post(props: PostProps) {
     "border-solid border-t-[1px] border-gray-200 py-3"
   );
 
-
   const like = () => {};
   const comment = () => {};
   const bookmark = () => {};
-
 
   return (
     <section className={cn} {...rest}>
@@ -116,7 +114,12 @@ export function Post(props: PostProps) {
                 </Stack>
               </Stack>
 
-              <Media src="https://media.tenor.com/U0ruyiGIGFkAAAAd/hhgf.gif" />
+              <Media
+                src={
+                  post.imageUrl ||
+                  "https://media.tenor.com/Pc_At0lvJi8AAAAd/little-girl-excited-cant-wait.gif"
+                }
+              />
 
               <Stack
                 direction="row"
@@ -135,13 +138,12 @@ export function Post(props: PostProps) {
                     <Text className="text-sm">32</Text>
                   </Stack>
 
-                    <ButtonIcon
-                      size={"sm"}
-                      variant="secondary"
-                      className="flex"
-                      icon={<Bookmark />}
-                    ></ButtonIcon>
-          
+                  <ButtonIcon
+                    size={"sm"}
+                    variant="secondary"
+                    className="flex"
+                    icon={<Bookmark />}
+                  ></ButtonIcon>
 
                   <Stack
                     direction="row"
@@ -173,43 +175,35 @@ export function Post(props: PostProps) {
   );
 }
 
-
-
 function getMediaType(url: string): "image" | "video" | "gif" {
-    // Extraction de l'extension du fichier
-    const extension = url.split('.').pop()?.toLowerCase();
+  // Extraction de l'extension du fichier
+  const extension = url.split(".").pop()?.toLowerCase();
+  console.log(extension)
+  if (!extension) return "image";
 
-    if (!extension) return "image";
+  // Définition des types de média
+  const imageExtensions = ["png", "jpg", "jpeg"];
+  const videoExtensions = ["mp4", "webm"];
+  const gifExtensions = ["gif"];
 
-    // Définition des types de média
-    const imageExtensions = ["png", "jpg", "jpeg"];
-    const videoExtensions = ["mp4", "webm"];
-    const gifExtensions = ["gif"];
+  if (imageExtensions.includes(extension)) return "image";
+  if (videoExtensions.includes(extension)) return "video";
+  if (gifExtensions.includes(extension)) return "gif";
 
-    if (imageExtensions.includes(extension)) return "image";
-    if (videoExtensions.includes(extension)) return "video";
-    if (gifExtensions.includes(extension)) return "gif";
-
-    return "image";
+  return "image";
 }
 
-
-
-function Media(props: {src: string}) {
-  const {src} = props;
+function Media(props: { src: string }) {
+  let { src } = props;
   const type = getMediaType(src);
   let content;
 
-  console.log(type);
-
-  switch(type) {
+  switch (type) {
     case "video":
-      content =  <video src={src} loop className="w-full h-full" />;
+      content = <video src={src} loop className="w-full h-full" />;
     default:
       content = <img src={src} alt="" className="w-full h-full" />;
-  } 
+  }
 
-  return <div className="overflow-hidden rounded-2xl">
-    {content}
-  </div>
+  return <div className="overflow-hidden rounded-2xl">{content}</div>;
 }
