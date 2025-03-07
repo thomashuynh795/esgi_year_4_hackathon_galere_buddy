@@ -1,6 +1,6 @@
 import {JwtAuthGuard} from "../auth/guard/jwtAuthGuard";
 import {CustomisedExpressRequest} from "../common/models/customised-express-request";
-import {Body, Controller, Delete, Param, Post, Req, UseGuards} from "@nestjs/common";
+import {Body, Controller, Delete, Get, Param, Post, Req, UseGuards} from "@nestjs/common";
 import {CreateParticipantDto} from "./dto/create-participant.dto";
 import {ParticipantService} from "./participant.service";
 
@@ -19,4 +19,9 @@ export class ParticipantController {
   leave(@Param("initiativeId") initiativeId: string, @Req() req: CustomisedExpressRequest) {
     return this.participantService.leave(initiativeId, req.user.id);
   }
+
+    @Get(":initiativeId")
+    getParticipants(@Param("initiativeId") initiativeId: string) {
+        return this.participantService.getParticipants(initiativeId);
+    }
 }

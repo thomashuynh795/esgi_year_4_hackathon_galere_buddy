@@ -9,6 +9,23 @@ export class ParticipantService {
       private readonly badgeService: BadgeService
   ) {}
 
+  //Voir la liste de participant d'une initiative
+  async getParticipants(initiativeId: string) {
+    return this.prisma.participant.findMany({
+      where: { initiativeId },
+      include: {
+        user: {
+          select: {
+            id: true,
+            firstname: true,
+            name: true,
+            avatarUrl: true
+          }
+        }
+      }
+    });
+  }
+
   async join(initiativeId: string, userId: string) {
     // Vérifier si l'initiative existe
     const initiative = await this.prisma.initiative.findUnique({
