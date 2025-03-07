@@ -92,11 +92,17 @@ export class PostController {
     public async commentPost(
         @Param("id") postId: string,
         @Body() createCommentDto: CreateCommentDto,
+        @Req() req: CustomisedExpressRequest,
         @Res() response: Response
     ): Promise<Response> {
         try {
-            createCommentDto.postId = postId;
-            const comment = await this.commentService.createComment(createCommentDto);
+
+            const commentData = {
+                content: createCommentDto.content,
+                postId: postId,
+                authorId: req.user.id
+            };
+            const comment = await this.commentService.createComment(commentData);
 
             return response
                 .status(HttpStatus.CREATED)
