@@ -25,7 +25,6 @@ export class HttpService {
 
       if(auth) {
         token = localStorage.getItem("token");
-        console.log(token);
       }
 
 

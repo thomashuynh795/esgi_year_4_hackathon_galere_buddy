@@ -23,8 +23,7 @@ export default function Login() {
     e.preventDefault();
     setError("");
 
-    console.log("email : ", email);
-    console.log("password : ", password);
+
     //vérify email
     if (!emailRegges.test(email)) {
       setError("Votre email n'est pas valid");

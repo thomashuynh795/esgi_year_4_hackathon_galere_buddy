@@ -198,12 +198,16 @@ function Media(props: { src: string }) {
   const type = getMediaType(src);
   let content;
 
+  console.log(type)
+
   switch (type) {
     case "video":
-      content = <video src={src} loop className="w-full h-full" />;
+      content = <video src={src} autoPlay={true} loop className="w-full h-full" muted/>;
+      break;
     default:
       content = <img src={src} alt="" className="w-full h-full" />;
   }
+
 
   return <div className="overflow-hidden rounded-2xl">{content}</div>;
 }

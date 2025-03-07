@@ -38,7 +38,6 @@ export default function SecondRegisterForm({
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    console.log(formData)
     const res: {jwt: string, message: string} = await createUser(formData);
 
     openToast({

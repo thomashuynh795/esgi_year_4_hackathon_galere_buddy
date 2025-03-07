@@ -18,7 +18,6 @@ export function PostGalereTrigger() {
        try {
          const response = await createPost(post);
         
-         console.log(response);
 
          opentToast({
           title: "Success",
