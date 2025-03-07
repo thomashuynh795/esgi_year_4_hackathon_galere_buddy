@@ -5,10 +5,16 @@ import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { JwtStrategy } from "./strategy/jwt.strategy";
 import { UserModule } from "src/user/user.module";
+import { PassportModule } from "@nestjs/passport";
+import { GoogleStrategy } from "./strategy/google.strategy";
 
 @Module({
     controllers: [AuthController],
-    providers: [AuthService, JwtStrategy],
+    providers: [
+        AuthService,
+        JwtStrategy,
+        GoogleStrategy
+    ],
     imports: [
         JwtModule.registerAsync({
             imports: [ConfigModule],
@@ -18,8 +24,12 @@ import { UserModule } from "src/user/user.module";
                 signOptions: { expiresIn: "100y" }
             })
         }),
-        UserModule
+        UserModule,
+        PassportModule.register({ defaultStrategy: "jwt" })
     ],
-    exports: [AuthService]
+    exports: [
+        AuthService,
+        PassportModule
+    ]
 })
 export class AuthModule { }
