@@ -11,3 +11,13 @@ export async function createUser(user: NewUser) {
     throw error;
   }
 }
+
+export async function modifyUser(user: NewUser) {
+  try {
+    const response = await http.patch<{jwt: string, message: string}>("/me", user);
+    return response;
+  } catch (error) {
+    console.error("Erreur lors de la création de l'utilisateur :", error);
+    throw error;
+  }
+}
