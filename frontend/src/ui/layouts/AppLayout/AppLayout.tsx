@@ -11,7 +11,7 @@ interface AppLayoutProps extends React.ComponentProps<"div"> {
 
 export function AppLayout(props: AppLayoutProps) {
   const { children, className, links, ...rest } = props;
-  const cn = classNames("w-full h-full flex flex-row bg-zinc-100 pt-[61px] md:pt-0", className);
+  const cn = classNames("w-full h-full flex flex-row bg-white pt-[61px] md:pt-0", className);
 
   return (
     <section className={cn} {...rest}>
@@ -30,13 +30,13 @@ export function AppLayout(props: AppLayoutProps) {
       </section>
 
       <section className={"hidden lg:inline-block w-full max-w-60 h-full"}>
-        <section
+        {/* <section
           className={
             "w-full h-full"
           }
         >
           <ScrollView><div className="bg-white h-10">Post favoris</div></ScrollView>
-        </section>
+        </section> */}
       </section>
     </section>
   );

@@ -16,14 +16,35 @@ export class HttpService {
   private async request<T>(
     method: string,
     endpoint: string,
-    body?: unknown
+    body?: unknown,
+    auth?: boolean
   ): Promise<T> {
     try {
+
+      let token: string | null;
+
+      if(auth) {
+        token = localStorage.getItem("token");
+      }
+
+
+      const getHeader = () => {
+        let header  = {
+          "Content-Type": "application/json",
+        };
+
+        if(token) {
+          return {...header, "Authorization" : `Bearer ${token}`};
+        } 
+
+        return header;
+      }
+
+      console.log(getHeader());
+
       const response = await fetch(`${this.baseUrl}${endpoint}`, {
         method,
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: getHeader(),
         body: body ? JSON.stringify(body) : undefined,
       });
 
@@ -46,8 +67,8 @@ export class HttpService {
     return this.request<T>("GET", endpoint);
   }
 
-  public async post<T>(endpoint: string, body?: unknown): Promise<T> {
-    return this.request<T>("POST", endpoint, body);
+  public async post<T>(endpoint: string, body?: unknown, auth?: boolean): Promise<T> {
+    return this.request<T>("POST", endpoint, body, auth);
   }
 
   public async put<T>(endpoint: string, body?: unknown): Promise<T> {

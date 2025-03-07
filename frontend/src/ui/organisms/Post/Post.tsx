@@ -24,6 +24,7 @@ export function Post(props: PostProps) {
     "border-solid border-t-[1px] border-gray-200 py-3"
   );
 
+<
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [type, setType] = useState("");
@@ -100,9 +101,22 @@ export function Post(props: PostProps) {
                   </Text>
                 </Stack>
 
+
                 <Stack direction="col" gapy={4} className="relative border border-gray-200 rounded-xl p-3 bg-zinc-50">
                   <Heading level={4} className="absolute -top-1/7 right-0 font-bold text-[10px] uppercase py-1 px-3 rounded-md bg-zinc-800 text-zinc-50">
                     Lesson
+
+                <Stack
+                  direction="col"
+                  gapy={4}
+                  className="relative border border-gray-200 rounded-xl p-3 bg-zinc-50"
+                >
+                  <Heading
+                    level={4}
+                    className=" absolute -top-1/7 right-0 font-bold text-[10px] uppercase py-1 px-3 rounded-md bg-zinc-800 text-zinc-50"
+                  >
+                    Leçon
+
                   </Heading>
                   <Text className="text-gray-800 font-medium">
                     {post.lesson}
@@ -110,7 +124,12 @@ export function Post(props: PostProps) {
                 </Stack>
               </Stack>
 
-              <Media src="https://media.tenor.com/U0ruyiGIGFkAAAAd/hhgf.gif" />
+              <Media
+                src={
+                  post.imageUrl ||
+                  "https://media.tenor.com/Pc_At0lvJi8AAAAd/little-girl-excited-cant-wait.gif"
+                }
+              />
 
               <Stack direction="row" gapx={4} align="center" justify={"space-between"}>
                 <Stack direction="row" align="center" gapx={14} className="">
@@ -124,7 +143,33 @@ export function Post(props: PostProps) {
                   <Stack direction="row" align="center" justify="center" className="w-full">
                     <ButtonIcon size={"sm"} variant="secondary" className="flex" icon={<MessageCircle />} />
                     <Text className="text-sm">Commentaires</Text>
+
+                  <Stack direction="row" align="center" justify="center" className="bg-white px-2 rounded-md">
+                    <ButtonIcon
+                      size={"sm"}
+                      variant="ghost"
+                      className="flex"
+                      icon={<Heart />}
+                    ></ButtonIcon>
+                    <Text className="text-sm">32</Text>
                   </Stack>
+
+                  <Stack direction="row">
+                    <ButtonIcon
+                      size={"sm"}
+                      variant="secondary"
+                      className="flex"
+                      icon={<Bookmark size={36} />}
+                    ></ButtonIcon>
+
+                  </Stack>
+
+                  <ButtonIcon
+                    size={"sm"}
+                    variant="secondary"
+                    className="flex"
+                    icon={<MessageCircle />}
+                  ></ButtonIcon>
                 </Stack>
 
                 <Button
@@ -136,6 +181,7 @@ export function Post(props: PostProps) {
               </Stack>
             </Stack>
           </Stack>
+              </Stack>
         </div>
       </Stack>
 
@@ -193,6 +239,7 @@ function getMediaType(url: string): "image" | "video" | "gif" {
   if (imageExtensions.includes(extension)) return "image";
   if (videoExtensions.includes(extension)) return "video";
   if (gifExtensions.includes(extension)) return "gif";
+
   return "image";
 }
 
@@ -200,12 +247,16 @@ function Media(props: { src: string }) {
   const { src } = props;
   const type = getMediaType(src);
   let content;
+ 
   switch (type) {
     case "video":
-      content = <video src={src} loop className="w-full h-full" />;
+      content = (
+        <video src={src} autoPlay={true} loop className="w-full h-full" muted />
+      );
       break;
     default:
       content = <img src={src} alt="" className="w-full h-full" />;
   }
+
   return <div className="overflow-hidden rounded-2xl">{content}</div>;
 }

@@ -1,5 +1,6 @@
 import { NewUser } from "@/types/User";
 import { http } from "./init.service";
+import { IPost, NewPost } from "@/types/Post";
 
 export async function createUser(user: NewUser) {
   try {
@@ -10,6 +11,17 @@ export async function createUser(user: NewUser) {
     throw error;
   }
 }
+
+
+export async function getAllPost() {
+  return await http.get<IPost[]>( "/post");
+}
+
+
+export async function createPost(post: NewPost) {
+  return await http.post<{ jwt: string; message: string }>("/post", post, true);
+}
+
 
 export async function loginUserRequest(data: {email: string, password: string}) {
   try {

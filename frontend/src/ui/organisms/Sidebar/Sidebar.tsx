@@ -134,6 +134,8 @@ const SidebarFooter = (props: SidebarFooterProps) => {
           <Text>@rogerb</Text>
         </Stack>
         </Link>
+
+        <Link href={"/auth/logout"} className="hover:underline">Se déconnecter</Link>
       </Stack>
     </div>
   );

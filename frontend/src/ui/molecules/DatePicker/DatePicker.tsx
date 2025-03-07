@@ -76,7 +76,6 @@ export const DatePicker = React.forwardRef((props: DatePickerExtendedProps, forw
     );
   });
 
-  console.log(props.readOnly);
 
   return (
     <DateComponent

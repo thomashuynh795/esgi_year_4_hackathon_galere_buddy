@@ -10,11 +10,22 @@ import Logo from "@/ui/atoms/Logo/Logo";
 import { POSTS } from "@/constants/sample";
 import { Post } from "@/ui/organisms/Post/Post";
 import { PostGalereTrigger } from "./(components)/PostGalereTrigger";
+import { useFetch } from "@/hooks/useFetch";
+import { getAllPost } from "@/services/fetch.service";
+import { LoadinSpinner } from "@/ui/molecules/LoadingSpinner/LoadingSpinner";
+import { redirect } from "next/navigation";
 
 export default function Dashboard() {
-    const posts = POSTS;
+    const {isLoading, data:posts} = useFetch("posts", getAllPost);
+    
+      if (!localStorage.getItem("token")) {
+        return redirect("/auth/login");
+      }
 
-    console.log(posts);
+    if(isLoading) {
+      return <LoadinSpinner/>
+    }
+
     return (
       <div className="w-full">
         <div className="hidden md:flex w-full flex-col">
@@ -47,10 +58,11 @@ export default function Dashboard() {
         </div>
 
         <div className="">
-          {posts.map((post) => {
+          {posts && posts.map((post) => {
             return <Post data={post} key={post.id} />;
           })}
         </div>
       </div>
     );
 }
+

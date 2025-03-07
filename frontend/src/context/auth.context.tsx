@@ -1,7 +1,7 @@
 "use client";
 
 import { redirect } from "next/navigation";
-import React, { ReactElement, ReactNode } from "react";
+import React, { ReactElement, ReactNode, useEffect } from "react";
 
 
 interface ContextProps {
@@ -30,6 +30,7 @@ export default function AuthProvider(props: ContextProps)
     window.localStorage.setItem("token", data.token);
     redirect("/dashboard");
   };
+
 
 
   const logout = () => {
