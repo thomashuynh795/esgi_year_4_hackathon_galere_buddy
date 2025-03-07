@@ -106,7 +106,7 @@ export function Post(props: PostProps) {
                     level={4}
                     className=" absolute -top-1/7 right-0 font-bold text-[10px] uppercase py-1 px-3 rounded-md bg-zinc-800 text-zinc-50"
                   >
-                    Lesson
+                    Leçon
                   </Heading>
                   <Text className="text-gray-800 font-medium">
                     {post.lesson}
@@ -128,7 +128,7 @@ export function Post(props: PostProps) {
                 justify={"space-between"}
               >
                 <Stack direction="row" align="center" gapx={14} className="">
-                  <Stack direction="row" align="center" justify="center">
+                  <Stack direction="row" align="center" justify="center" className="bg-white px-2 rounded-md">
                     <ButtonIcon
                       size={"sm"}
                       variant="ghost"
@@ -138,27 +138,21 @@ export function Post(props: PostProps) {
                     <Text className="text-sm">32</Text>
                   </Stack>
 
-                  <ButtonIcon
-                    size={"sm"}
-                    variant="secondary"
-                    className="flex"
-                    icon={<Bookmark />}
-                  ></ButtonIcon>
-
-                  <Stack
-                    direction="row"
-                    align="center"
-                    justify="center"
-                    className="w-full"
-                  >
+                  <Stack direction="row">
                     <ButtonIcon
                       size={"sm"}
                       variant="secondary"
                       className="flex"
-                      icon={<MessageCircle />}
+                      icon={<Bookmark size={36} />}
                     ></ButtonIcon>
-                    <Text className="text-sm">Commentaires</Text>
                   </Stack>
+
+                  <ButtonIcon
+                    size={"sm"}
+                    variant="secondary"
+                    className="flex"
+                    icon={<MessageCircle />}
+                  ></ButtonIcon>
                 </Stack>
 
                 <Button
@@ -178,7 +172,7 @@ export function Post(props: PostProps) {
 function getMediaType(url: string): "image" | "video" | "gif" {
   // Extraction de l'extension du fichier
   const extension = url.split(".").pop()?.toLowerCase();
-  console.log(extension)
+  console.log(extension);
   if (!extension) return "image";
 
   // Définition des types de média
@@ -198,16 +192,15 @@ function Media(props: { src: string }) {
   const type = getMediaType(src);
   let content;
 
-  console.log(type)
-
   switch (type) {
     case "video":
-      content = <video src={src} autoPlay={true} loop className="w-full h-full" muted/>;
+      content = (
+        <video src={src} autoPlay={true} loop className="w-full h-full" muted />
+      );
       break;
     default:
       content = <img src={src} alt="" className="w-full h-full" />;
   }
-
 
   return <div className="overflow-hidden rounded-2xl">{content}</div>;
 }

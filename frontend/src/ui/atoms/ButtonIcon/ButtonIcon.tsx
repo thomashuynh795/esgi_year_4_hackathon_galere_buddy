@@ -27,7 +27,8 @@ export function ButtonIcon(props: ButtonIconProps) {
     ...rest
   } = props;
   const cn = classNames(
-    { "!rounded-full": rounded },
+    "cursor-pointer",
+    { "!rounded-full ": rounded },
     "text-gray-700 flex items-center justify-center ",
     { "rounded-lg bg-zinc-800 text-white hover:bg-zinc-900 shadow-button": variant === "primary" },
     { "rounded-lg bg-white text-gray-700 hover:bg-gray-100 shadow-button": variant === "secondary" },
