@@ -11,7 +11,7 @@ interface AppLayoutProps extends React.ComponentProps<"div"> {
 
 export function AppLayout(props: AppLayoutProps) {
   const { children, className, links, ...rest } = props;
-  const cn = classNames("w-full h-full flex flex-row bg-zinc-100", className);
+  const cn = classNames("w-full h-full flex flex-row bg-zinc-100 pt-[61px] md:pt-0", className);
 
   return (
     <section className={cn} {...rest}>

@@ -6,11 +6,15 @@ import classNames from "classnames";
 import "../styles/globals.css";
 import { Toast } from "@/ui/organisms/Toast/Toast";
 import * as Alert from "@/ui/organisms/Alert/Alert";
-import AuthProvider from "@/context/auth.context";
+import dynamic from "next/dynamic";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+});
+
+const AuthProvider = dynamic(() => import("@/context/auth.context"), {
+  ssr: false,
 });
 
 

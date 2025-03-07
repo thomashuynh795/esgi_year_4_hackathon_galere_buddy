@@ -33,7 +33,7 @@ export default function SecondRegisterForm({
   formData,
   setFormData,
 }: SecondRegisterFormProps) {
-  const {login} = useAuthContext();
+  const {register} = useAuthContext();
 
 
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -47,7 +47,7 @@ export default function SecondRegisterForm({
       style: "success"
     })
 
-    login({token: res.jwt})
+    register({ token: res.jwt });
   };
 
   return (

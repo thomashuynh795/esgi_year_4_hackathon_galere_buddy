@@ -29,7 +29,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     } = props;
 
     const defaultStyle =
-      "flex items-center justify-center font-medium text-sm flex-row py-2 px-4 focus:ring-2 ring-offset-2 focus:ring-zinc-900 rounded-[.7rem] ";
+      "flex items-center justify-center font-medium text-sm flex-row py-2 px-4 focus:ring-2 ring-offset-2 focus:ring-zinc-900 rounded-[.7rem] cursor-pointer ";
 
     const variantStyle: { [key in variantTypes]: string } = {
       ghost: "hover:bg-gray-100",

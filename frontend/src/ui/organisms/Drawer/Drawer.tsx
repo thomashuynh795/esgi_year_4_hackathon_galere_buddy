@@ -8,6 +8,7 @@ import { XIcon } from "lucide-react";
 import { Overlay } from "@ui/atoms/Overlay/Overlay";
 import { ScrollView } from "@ui/layouts/ScrollView/ScrollView";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { Stack } from "@/ui/layouts/Stack/Stack";
 
 export interface DrawerProps extends DialogProps {
   title: string;
@@ -19,6 +20,7 @@ export function Root(props: DrawerProps) {
   let actionButton = null;
   let content: string | ReactNode[] = [];
   let trigger = null;
+  let footer = null
 
   React.Children.forEach(children, (child: any) => {
     if (child.type === Cancel) {
@@ -27,7 +29,9 @@ export function Root(props: DrawerProps) {
       actionButton = child;
     } else if (child.type === Trigger) {
       trigger = child;
-    } else {
+    } else if (child.type === Footer) {
+      footer = child;
+    }else {
       content.push(child);
     }
   });
@@ -39,11 +43,15 @@ export function Root(props: DrawerProps) {
         <Overlay />
         <Dialog.Description>Drawer content</Dialog.Description>
         <Dialog.Content
-          className={"fixed left-0 top-0 bottom-0 right-0 z-10 flex flex-col p-8 items-end justify-center"}>
+          className={
+            "fixed left-0 top-0 bottom-0 right-0 z-10 flex flex-col p-8 items-center"
+          }
+        >
           <div
             className={
-              "w-full max-w-[30rem] flex flex-col border-solid border-[1px] border-gray-200 bg-white z-10 rounded-2xl shadow-modal"
-            }>
+              "h-full w-full max-w-[36rem] flex flex-col border-solid border-[1px] border-gray-200 bg-white z-10 rounded-2xl shadow-modal"
+            }
+          >
             <VisuallyHidden>
               <Dialog.Title></Dialog.Title>
             </VisuallyHidden>
@@ -57,16 +65,25 @@ export function Root(props: DrawerProps) {
             </header>
 
             {/*Moda Content*/}
-            <ScrollView className={"border-solid h-full border-gray-200 border-y-[1px]"}>
+            <ScrollView
+              className={"border-solid h-full border-gray-200 border-y-[1px] pb-0"}
+            >
               <div className={"pt-6 px-6"}>{content || "Modal Content"}</div>
             </ScrollView>
 
             {/*Moda Footer*/}
-            <footer className={"flex items-center justify-end space-x-[.625rem] p-[.625rem]"}>
-              {!closeButton && <Cancel />}
-              {closeButton && closeButton}
-              {!actionButton && <Action />}
-              {actionButton && actionButton}
+            <footer
+              className={
+                "flex items-center justify-between p-[.625rem]"
+              }
+            >
+              {footer && <Footer>{footer}</Footer>}
+
+              <Stack direction="row" className="ml-auto" gapx={10}>
+                {closeButton && closeButton}
+                {!actionButton && <Action />}
+                {actionButton && actionButton}
+              </Stack>
             </footer>
           </div>
         </Dialog.Content>
@@ -74,6 +91,21 @@ export function Root(props: DrawerProps) {
     </Dialog.Root>
   );
 }
+
+
+
+type DrawerFooterProps = React.ComponentProps<"div"> & {
+  children?: ReactElement;
+};
+
+export const Footer = (props: DrawerFooterProps) => {
+  const {children, ...rest } = props;
+
+  return (
+      <Stack direction="row" {...rest}>{children}</Stack>
+  );
+};
+
 
 type DrawerActionProps = DialogCloseProps & {
   children?: ReactElement;
