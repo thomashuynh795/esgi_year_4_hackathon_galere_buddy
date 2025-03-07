@@ -1,11 +1,11 @@
 "use client"
-import React, {useState} from "react";
-import {TextField} from "@ui/atoms/Inputs/TextField/TextField";
-import {Button} from "@ui/atoms/Button/Button";
-import {Mail} from "@icons"
+import React, { useState } from "react";
+import { TextField } from "@ui/atoms/Inputs/TextField/TextField";
+import { Button } from "@ui/atoms/Button/Button";
+import { Mail } from "@icons"
 import Link from "next/link";
 //import {login} from "@/services/fetch.service";
-import {open} from "@/ui/organisms/Toast/Toast"
+import { open } from "@/ui/organisms/Toast/Toast"
 
 
 export default function Login() {
@@ -39,11 +39,12 @@ export default function Login() {
         try {
             const response = await fetch(
                 "http://localhost:3000/auth/log-in",
-                {   method: "POST",
+                {
+                    method: "POST",
                     headers: {
-                    "Content-Type": "application/json",
+                        "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({email: email, password: password})
+                    body: JSON.stringify({ email: email, password: password })
                 }
             );
             if (response.ok) {
@@ -54,7 +55,7 @@ export default function Login() {
                     style: "success",
 
                 })
-            }else {
+            } else {
                 open(
                     {
                         title: "Oops, une erreur est survenue.",
@@ -79,10 +80,10 @@ export default function Login() {
                 {error && <p className="text-red-500 text-sm text-center">{error}</p>}
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <TextField type="email" placeholder="Adresse email" className="w-full p-2 border rounded"
-                               onChange={(e) => setEmail(e.target.value)} required icon={<Mail/>}/>
+                        onChange={(e) => setEmail(e.target.value)} required icon={<Mail />} />
                     <TextField type="password" placeholder="Mot de passe" className="w-full p-2 border rounded"
-                               onChange={(e) => setPassword(e.target.value)} required/>
-                    <Button type="submit" className="w-full bg-black text-white p-2 rounded" label={"Se connecter"}/>
+                        onChange={(e) => setPassword(e.target.value)} required />
+                    <Button type="submit" className="w-full bg-black text-white p-2 rounded" label={"Se connecter"} />
                 </form>
                 <p className="text-xs mt-4">
                     Pas encore de compte ?{"   "}
