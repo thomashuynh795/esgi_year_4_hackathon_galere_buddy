@@ -17,6 +17,10 @@ export async function getAllPost() {
   return await http.get<IPost[]>( "/post");
 }
 
+export async function getPost() {
+  return await http.get<IPost[]>( "/post");
+}
+
 
 export async function createPost(post: NewPost) {
   return await http.post<{ jwt: string; message: string }>("/post", post, true);
