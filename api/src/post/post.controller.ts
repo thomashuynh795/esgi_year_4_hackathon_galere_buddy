@@ -45,6 +45,9 @@ export class PostController {
     @UseGuards(JwtAuthGuard)
     async create(@Body() createPostDto: CreatePostDto,
                  @Req() req: CustomisedExpressRequest) {
+                    console.log("la  requete ici \n",req);
+                    console.log(createPostDto);
+                    
         return this.postService.create(createPostDto,req.user.id );
     }
 

@@ -24,7 +24,6 @@ export function Post(props: PostProps) {
     "border-solid border-t-[1px] border-gray-200 py-3"
   );
 
-<
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [type, setType] = useState("");
@@ -105,7 +104,7 @@ export function Post(props: PostProps) {
                 <Stack direction="col" gapy={4} className="relative border border-gray-200 rounded-xl p-3 bg-zinc-50">
                   <Heading level={4} className="absolute -top-1/7 right-0 font-bold text-[10px] uppercase py-1 px-3 rounded-md bg-zinc-800 text-zinc-50">
                     Lesson
-
+                </Heading>
                 <Stack
                   direction="col"
                   gapy={4}
@@ -173,15 +172,17 @@ export function Post(props: PostProps) {
                 </Stack>
 
                 <Button
-                  label={"Créer un lead"}
+                  label={"Faire une collab"}
                   variant="primary"
                   className="!h-8 !py-1"
                   onClick={() => setModalOpen(true)}
                 />
               </Stack>
             </Stack>
+            </Stack>
           </Stack>
-              </Stack>
+          </Stack>
+          
         </div>
       </Stack>
 

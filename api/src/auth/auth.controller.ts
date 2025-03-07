@@ -1,4 +1,4 @@
-import { Body, Controller, HttpStatus, Post, Res } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Post, Req, Res, UseGuards } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { Response } from "express";
 import { ErrorHandlerService } from "src/common/utils/error-handler/error-handler.service";
@@ -6,13 +6,20 @@ import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { SignUpRequestAuthDto } from "./dto/sign-up-request-auth.dto";
 import { LogInAuthDto } from "./dto/log-in-request-auth.dto";
 import { SignUpResponseAuthDto } from "./dto/sign-up-response-auth.dto";
+import { AuthGuard } from "@nestjs/passport";
+import { UserService } from "src/user/user.service";
+import { PrismaService } from "src/prisma/prisma.service";
+import { User } from "@prisma/client";
+import { UpdateUserRequestDto } from "src/user/dto/update-user-request.dto";
 
 @Controller("auth")
 @ApiTags("auth")
 export class AuthController {
     public constructor(
         private readonly authService: AuthService,
-        private readonly errorHandlerService: ErrorHandlerService
+        private readonly errorHandlerService: ErrorHandlerService,
+        private readonly userService: UserService,
+        private readonly prismaService: PrismaService
     ) { }
 
     @Post("sign-up")
@@ -48,4 +55,30 @@ export class AuthController {
             return this.errorHandlerService.getErrorForControllerLayer(error, response);
         }
     }
+
+    @Get("google")
+    @UseGuards(AuthGuard("google"))
+    async googleLogin() {
+    }
+
+    @Get("google/callback")
+    @UseGuards(AuthGuard("google"))
+    async googleAuthRedirect(@Req() req) {
+        console.log(req.user);
+        const foundUser: User = await this.prismaService.user.findUnique({
+            where: { email: req.user.email }
+        });
+        const dto: UpdateUserRequestDto = {
+            email: req.user.email,
+            firstname: req.user.firstName,
+            name: req.user.lastName,
+            avatarUrl: req.user.picture
+        };
+        const user = this.userService.updateUser(foundUser.id, dto, null);
+        return {
+            message: "User Info from Google",
+            user
+        };
+    }
+
 }

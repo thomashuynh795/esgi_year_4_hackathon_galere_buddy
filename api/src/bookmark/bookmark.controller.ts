@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Res, UseGuards } from "@nestjs/common";
+import { Controller, Delete, Get, HttpStatus, Param, Post, Req, Res, UseGuards } from "@nestjs/common";
 import { BookmarkService } from "./bookmark.service";
 import { ErrorHandlerService } from "src/common/utils/error-handler/error-handler.service";
 import { JwtAuthGuard } from "src/auth/guard/jwtAuthGuard";
@@ -6,78 +6,72 @@ import { RolesGuard } from "src/auth/guard/roles.guard";
 import { Roles } from "src/auth/decorator/roles.decorator";
 import { Role } from "@prisma/client";
 import { Response } from "express";
-import { CreateBookmarkDto } from "./dto/create-bookmark.dto";
+import { CustomisedExpressRequest } from "src/common/models/customised-express-request";
 
 @Controller("bookmarks")
 export class BookmarkController {
-    constructor(
-        private readonly bookmarkService: BookmarkService,
-        private readonly errorHandlerService: ErrorHandlerService
-    ) { }
+  constructor(
+    private readonly bookmarkService: BookmarkService,
+    private readonly errorHandlerService: ErrorHandlerService
+  ) {}
 
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles(Role.ADMIN, Role.MEMBER)
-    @Get(":userId")
-    public async getBookmarksOfUser(
-      @Param("userId") userId: string,
-      @Res() response: Response
-    ): Promise<Response> {
-      try {
-        const bookmarks = await this.bookmarkService.getBookmarksByUserId(userId);
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN, Role.MEMBER)
+  @Get(":userId")
+  public async getBookmarksOfUser(
+    @Param("userId") userId: string,
+    @Res() response: Response
+  ): Promise<Response> {
+    try {
+      const bookmarks = await this.bookmarkService.getBookmarksByUserId(userId);
 
-        return response
-            .status(HttpStatus.OK)
-            .json(bookmarks);
-      } catch (error: any) {
-          return this.errorHandlerService
-          .getErrorForControllerLayer(
-              error,
-              response
-          );
-      }
+      return response.status(HttpStatus.OK).json(bookmarks);
+    } catch (error: any) {
+      return this.errorHandlerService.getErrorForControllerLayer(
+        error,
+        response
+      );
     }
+  }
 
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles(Role.ADMIN, Role.MEMBER)
-    @Post()
-    public async addBookmark(
-      @Body() createBookmarkDto: CreateBookmarkDto,
-      @Res() response: Response
-    ): Promise<Response> {
-      try {
-        const bookmark = await this.bookmarkService.createBookmark(createBookmarkDto);
-
-        return response
-            .status(HttpStatus.CREATED)
-            .json(bookmark);
-      } catch (error: any) {
-          return this.errorHandlerService
-          .getErrorForControllerLayer(
-              error,
-              response
-          );
-      }
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN, Role.MEMBER)
+  @Post(":postId")
+  public async addBookmark(
+    @Param("postId") postId: string,
+    @Req() req: CustomisedExpressRequest,
+    @Res() response: Response
+  ): Promise<Response> {
+    try {
+      const bookmark = await this.bookmarkService.createBookmark(
+        postId,
+        req.user.id
+      );
+      return response.status(HttpStatus.CREATED).json(bookmark);
+    } catch (error: any) {
+      return this.errorHandlerService.getErrorForControllerLayer(
+        error,
+        response
+      );
     }
+  }
 
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles(Role.ADMIN, Role.MEMBER)
-    @Delete(":bookmarkId")
-    public async deleteBookmark(
-      @Param("bookmarkId") bookmarkId: string,
-      @Res() response: Response
-    ): Promise<Response> {
-      try {
-        await this.bookmarkService.deleteBookmark(bookmarkId);
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN, Role.MEMBER)
+  @Delete(":bookmarkId")
+  public async deleteBookmark(
+    @Param("bookmarkId") bookmarkId: string,
+    @Res() response: Response
+  ): Promise<Response> {
+    try {
+      await this.bookmarkService.deleteBookmark(bookmarkId);
 
-        return response
-            .status(HttpStatus.NO_CONTENT) 
-            .json();
-      } catch (error: any) {
-        return this.errorHandlerService
-        .getErrorForControllerLayer(
-            error,
-            response
-        );
-      }
+      return response.status(HttpStatus.NO_CONTENT).json();
+    } catch (error: any) {
+      return this.errorHandlerService.getErrorForControllerLayer(
+        error,
+        response
+      );
     }
+  }
 }
