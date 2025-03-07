@@ -8,8 +8,8 @@ datasource db {
 }
 
 enum Role {
-  ADMIN
-  MEMBER
+    ADMIN
+    MEMBER
 }
 
 enum React {
@@ -24,7 +24,7 @@ model User {
     password  String
     firstname String
     name      String
-    avatarUrl String?  
+    avatarUrl String?
     role      Role     @default(MEMBER)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt

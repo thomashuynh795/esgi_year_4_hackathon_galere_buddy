@@ -1,9 +1,9 @@
-import {JwtGuard} from "../auth/guard/jwt.guard";
-import {CreatePostDto} from "./dto/create-post.dto";
-import {PostService} from "./post.service";
-import {CustomisedExpressRequest} from "../common/models/customised-express-request";
-import {UpdatePostDto} from "./dto/update-post.dto";
-import {Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Req, Res, UseGuards} from "@nestjs/common";
+import { JwtGuard } from "../auth/guard/jwt.guard";
+import { CreatePostDto } from "./dto/create-post.dto";
+import { PostService } from "./post.service";
+import { CustomisedExpressRequest } from "../common/models/customised-express-request";
+import { UpdatePostDto } from "./dto/update-post.dto";
+import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Req, Res, UseGuards } from "@nestjs/common";
 import { ErrorHandlerService } from "src/common/utils/error-handler/error-handler.service";
 import { CommentService } from "src/comment/comment.service";
 import { Response } from "express";
@@ -15,6 +15,7 @@ import { ReactionService } from "src/reaction/reaction.service";
 import { RolesGuard } from "src/auth/guard/roles.guard";
 import { Role } from "@prisma/client";
 import { Roles } from "src/auth/decorator/roles.decorator";
+import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 
 @Controller("post")
 export class PostController {
@@ -25,7 +26,8 @@ export class PostController {
         private readonly reactionService: ReactionService
     ) { }
 
-
+    @ApiOperation({ summary: "Get all posts" })
+    @ApiResponse({ status: 200, description: "All posts" })
     @Get()
     async findAll() {
         return this.postService.findAll();
@@ -44,23 +46,23 @@ export class PostController {
     @Post()
     @UseGuards(JwtGuard)
     async create(@Body() createPostDto: CreatePostDto,
-                 @Req() req: CustomisedExpressRequest) {
-        return this.postService.create(createPostDto,req.user.id );
+        @Req() req: CustomisedExpressRequest) {
+        return this.postService.create(createPostDto, req.user.id);
     }
 
     @Delete(":id")
     @UseGuards(JwtGuard)
     async delete(@Param("id") id: string,
-                 @Req() req: CustomisedExpressRequest) {
-        return this.postService.delete(id,req.user.id);
+        @Req() req: CustomisedExpressRequest) {
+        return this.postService.delete(id, req.user.id);
     }
 
     @Patch(":id")
     @UseGuards(JwtGuard)
     async update(@Param("id") id: string,
-                 @Body() updatePostDto: UpdatePostDto,
-                 @Req() req: CustomisedExpressRequest) {
-        return this.postService.update(id,updatePostDto,req.user.id);
+        @Body() updatePostDto: UpdatePostDto,
+        @Req() req: CustomisedExpressRequest) {
+        return this.postService.update(id, updatePostDto, req.user.id);
     }
 
 
@@ -79,10 +81,10 @@ export class PostController {
                 .json(comments);
         } catch (error: any) {
             return this.errorHandlerService
-            .getErrorForControllerLayer(
-                error,
-                response
-            );
+                .getErrorForControllerLayer(
+                    error,
+                    response
+                );
         }
     }
 
@@ -103,10 +105,10 @@ export class PostController {
                 .json(comment);
         } catch (error: any) {
             return this.errorHandlerService
-            .getErrorForControllerLayer(
-                error,
-                response
-            );
+                .getErrorForControllerLayer(
+                    error,
+                    response
+                );
         }
     }
 
@@ -127,10 +129,10 @@ export class PostController {
                 .json(reaction);
         } catch (error: any) {
             return this.errorHandlerService
-            .getErrorForControllerLayer(
-                error,
-                response
-            );
+                .getErrorForControllerLayer(
+                    error,
+                    response
+                );
         }
     }
 
@@ -148,10 +150,10 @@ export class PostController {
                 .json(reactions);
         } catch (error: any) {
             return this.errorHandlerService
-            .getErrorForControllerLayer(
-                error,
-                response
-            );
+                .getErrorForControllerLayer(
+                    error,
+                    response
+                );
         }
     }
 }

@@ -4,8 +4,9 @@ import { Response } from "express";
 import { ErrorHandlerService } from "src/common/utils/error-handler/error-handler.service";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { SignUpRequestAuthDto } from "./dto/sign-up-request-auth.dto";
-import { LogInAuthDto } from "./dto/log-in-request-auth.dto";
+import { LogInRequestAuthDto } from "./dto/log-in-request-auth.dto";
 import { SignUpResponseAuthDto } from "./dto/sign-up-response-auth.dto";
+import { LogInResponseAuthDto } from "./dto/log-in-response-auth.dto";
 
 @Controller("auth")
 @ApiTags("auth")
@@ -17,7 +18,7 @@ export class AuthController {
 
     @Post("sign-up")
     @ApiOperation({ summary: "Sign up" })
-    @ApiResponse({ status: 201, description: "Created" })
+    @ApiResponse({ status: 201, description: "Created", type: SignUpResponseAuthDto })
     @ApiResponse({ status: 400, description: "Bad Request" })
     @ApiResponse({ status: 500, description: "Internal Server Error" })
     public async signUp(
@@ -34,11 +35,11 @@ export class AuthController {
 
     @Post("log-in")
     @ApiOperation({ summary: "Log in" })
-    @ApiResponse({ status: 200, description: "OK", type: SignUpResponseAuthDto })
+    @ApiResponse({ status: 200, description: "OK", type: LogInResponseAuthDto })
     @ApiResponse({ status: 400, description: "Bad Request" })
     @ApiResponse({ status: 500, description: "Internal Server Error" })
     public async logIn(
-        @Body() dto: LogInAuthDto,
+        @Body() dto: LogInRequestAuthDto,
         @Res() response: Response
     ): Promise<Response> {
         try {
