@@ -2,7 +2,7 @@ import { IPost } from "@/types/Post";
 
 const POSTS: IPost[] = [
   {
-    id: "b9a60ec8-7bb2-4a75-9d36-43046e73cbce",
+    id: "e9f9e1be-75fd-4ba4-8d12-27d06a10ba67",
     title: "Le jour où MongoDB m'a fait pleurer",
     imageUrl: "https://via.placeholder.com/500x300?text=MongoDB+Tears",
     problem:
