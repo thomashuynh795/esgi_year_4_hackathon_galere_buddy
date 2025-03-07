@@ -9,6 +9,7 @@ import { open } from "@/ui/organisms/Toast/Toast";
 import { useAuthContext } from "@/hooks/useContext";
 import { loginUserRequest } from "@/services/fetch.service";
 import { open as openToast } from "@ui/organisms/Toast/Toast";
+import { redirect } from "next/navigation";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -18,6 +19,11 @@ export default function Login() {
   const emailRegges = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const passwordRegges =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+
+    if(localStorage.getItem("token")) {
+      redirect("/dashboard")
+    }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

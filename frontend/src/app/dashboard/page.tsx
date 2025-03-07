@@ -13,9 +13,14 @@ import { PostGalereTrigger } from "./(components)/PostGalereTrigger";
 import { useFetch } from "@/hooks/useFetch";
 import { getAllPost } from "@/services/fetch.service";
 import { LoadinSpinner } from "@/ui/molecules/LoadingSpinner/LoadingSpinner";
+import { redirect } from "next/navigation";
 
 export default function Dashboard() {
     const {isLoading, data:posts} = useFetch("posts", getAllPost);
+    
+      if (!localStorage.getItem("token")) {
+        return redirect("/auth/login");
+      }
 
     if(isLoading) {
       return <LoadinSpinner/>
