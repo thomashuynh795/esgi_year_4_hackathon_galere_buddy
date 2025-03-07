@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/ui/atoms/Button/Button";
 import * as Drawer  from "@ui/organisms/Drawer/Drawer";
 import PostGalereForm from "./PostGalereForm";
@@ -17,7 +19,6 @@ export function PostGalereTrigger() {
     const create = async (post: NewPost) => {
        try {
          const response = await createPost(post);
-        
 
          opentToast({
           title: "Success",
@@ -25,6 +26,11 @@ export function PostGalereTrigger() {
           style: "success"
         
          })
+
+
+         setIsDrawerOpen(false);
+         setIsLoading(false);
+         window.location.reload();
        } catch (error) {
          console.error("Erreur lors de la création du post :", error);
                   
@@ -37,7 +43,7 @@ export function PostGalereTrigger() {
     };
 
     return (
-      <Drawer.Root title="Poster une galère">
+      <Drawer.Root title="Poster une galère" open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
         <Drawer.Trigger>
           <Button
             label="Poster une galère"
@@ -50,7 +56,7 @@ export function PostGalereTrigger() {
           handleFormRef={setFormRef}
           handleSubmit={async (post: NewPost | IPost) => {
             setIsLoading(true);
-            createPost(post);
+            await create(post);
             setIsLoading(false);
             setIsDrawerOpen(false);
           }}
@@ -65,9 +71,15 @@ export function PostGalereTrigger() {
         </Drawer.Footer> */}
 
         <Drawer.Action>
-          <Button label="Poster" variant={"rounded"} type={"button"} onClick={() => {
-            formRef?.requestSubmit();
-          }}/>
+          <Button
+            label="Poster"
+            variant={"rounded"}
+            loading={isLoading}
+            type={"button"}
+            onClick={() => {
+              formRef?.requestSubmit();
+            }}
+          />
         </Drawer.Action>
       </Drawer.Root>
     );

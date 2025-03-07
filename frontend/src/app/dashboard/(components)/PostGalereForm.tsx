@@ -17,7 +17,7 @@ export default function PostGalereForm(props: PostGalereFormProps) {
   const [imgUrl, setImgUrl]= React.useState("");
   const [pst, setPst] = React.useState({});
 
-  const onSubmit = (formdata: FormData) => {
+  const onSubmit = () => {
     if (!formRef.current) return;
 
     const post: NewPost = {
@@ -25,8 +25,7 @@ export default function PostGalereForm(props: PostGalereFormProps) {
       imageUrl: imgUrl,
     };
 
-    console.log(post);
-    handleSubmit(post);
+      handleSubmit(post);
   };
 
   React.useEffect(() => {
@@ -40,56 +39,73 @@ export default function PostGalereForm(props: PostGalereFormProps) {
       <Stack direction="col">
         <Stack direction="col">
           <Stack direction="col">
-            <TextField label="Titre" type={"text"} name={"title"} onChange={(e) => {
-              setPst(prev =>  ({...prev, title: e.target.value}));
-            }}/>
+            <TextField
+              label="Titre"
+              type={"text"}
+              name={"title"}
+              onChange={(e) => {
+                setPst((prev) => ({ ...prev, title: e.target.value }));
+              }}
+            />
           </Stack>
 
           <Stack direction="col">
             <label>
               Problème
-              <TextBox name={"problem"}  onChange={(e) => {
-              setPst(prev =>  ({...prev, problem: e.target.value}));
-            }}/>
+              <TextBox
+                name={"problem"}
+                onChange={(e) => {
+                  setPst((prev) => ({ ...prev, problem: e.target.value }));
+                }}
+              />
             </label>
           </Stack>
 
           <Stack direction="col">
             <label>
               Solution
-              <TextBox name={"solution"} onChange={(e) => {
-              setPst(prev =>  ({...prev, solution: e.target.value}));
-            }}/>
+              <TextBox
+                name={"solution"}
+                onChange={(e) => {
+                  setPst((prev) => ({ ...prev, solution: e.target.value }));
+                }}
+              />
             </label>
           </Stack>
 
           <Stack direction="col">
             <label>
               Conseil
-              <TextBox name={"advice"} onChange={(e) => {
-              setPst(prev =>  ({...prev, advice: e.target.value}));
-            }}/>
+              <TextBox
+                name={"advice"}
+                onChange={(e) => {
+                  setPst((prev) => ({ ...prev, advice: e.target.value }));
+                }}
+              />
             </label>
           </Stack>
 
           <Stack direction="col">
             <label>
               Leçon
-              <TextBox name={"lesson"} onChange={(e) => {
-              setPst(prev =>  ({...prev, lesson: e.target.value}));
-            }}/>
+              <TextBox
+                name={"lesson"}
+                onChange={(e) => {
+                  setPst((prev) => ({ ...prev, lesson: e.target.value }));
+                }}
+              />
             </label>
           </Stack>
         </Stack>
+
+        <MediaUploader
+          handleGif={(gif: any) => {
+            if (gif && gif.url) {
+              setImgUrl(gif.url);
+            }
+          }}
+        />
       </Stack>
-
-      <MediaUploader handleGif={(gif: any) => {
-        console.log(gif);
-
-        if(gif && gif.url) {
-          setImgUrl(gif.url);
-        }
-      }}/>
     </form>
   );
 }
@@ -200,7 +216,9 @@ const MediaUploader = (props: {handleGif: CallableFunction}) => {
   };
 
   useEffect(() => {
-    props.handleGif(selectedMedia);
+    if(selectedMedia) {
+      props.handleGif(selectedMedia);
+    }
   }, [selectedMedia])
 
   // Effet pour déclencher la recherche lors de la modification du terme de recherche
@@ -232,13 +250,13 @@ const MediaUploader = (props: {handleGif: CallableFunction}) => {
         </button> */}
 
         <button
+          type="button"
           onClick={openGifModal}
           className="p-2 hover:bg-gray-200 rounded-md transition-colors"
           title="Ajouter un GIF"
         >
           <div className="w-6 h-6 relative">
             <Image size={24} />
-            <Play size={12} className="absolute -bottom-1 -right-1" />
           </div>
         </button>
 
