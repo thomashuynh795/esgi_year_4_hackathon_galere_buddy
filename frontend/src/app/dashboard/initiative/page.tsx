@@ -24,46 +24,35 @@ export default function Initiative() {
   const [user, setUser] = useState<UserResponse | null>(null);
 
   const fetchUser = async () => {
-      const token = localStorage.getItem("token");
-      
-      const response = await fetch("http://localhost:3001/users/me", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
-        },
-      });
-            
-      const data = await response.json();
-      setUser(data);
+    const token = localStorage.getItem("token");
+    const response = await fetch("http://localhost:3001/users/me", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+    const data = await response.json();
+    setUser(data);
   };
 
   const fetchInitiatives = async () => {
-      const token = localStorage.getItem("token");
-      
-      const response = await fetch("http://localhost:3001/initiatives", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
-        },
-      });
-      
-      
-      const data = await response.json();
-      setInitiatives(data);
+    const token = localStorage.getItem("token");
+    const response = await fetch("http://localhost:3001/initiatives", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+    const data = await response.json();
+    setInitiatives(data);
   };
 
   useEffect(() => {
     fetchInitiatives();
     fetchUser();
   }, []);
-
-  useEffect(() => {
-  }, [initiatives]);
-
-  useEffect(() => {
-  }, [user]);
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -73,11 +62,8 @@ export default function Initiative() {
           {initiatives.map((initiative, index) => {
             let isParticipant = false;
 
-            console.log(user);
-            if(user) {
+            if (user) {
               for (const participant of initiative.participants) {
-                console.log(participant.user.id);
-                console.log(user.user.id);
                 if (participant.user.id === user.user.id) {
                   isParticipant = true;
                   break;
@@ -87,12 +73,14 @@ export default function Initiative() {
        
             return (
               <InitiativeComponent
-                key={index}
+                key={initiative.id}
                 id={initiative.id}
                 title={initiative.title}
                 description={initiative.description}
                 isParticipant={isParticipant}
                 className="mb-6 p-6 border border-gray-300 rounded-lg shadow-md bg-white"
+                // Callback pour rafraîchir les initiatives après une action
+                onParticipationChange={fetchInitiatives}
               />
             );
           })}

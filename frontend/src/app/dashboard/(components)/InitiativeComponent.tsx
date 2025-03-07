@@ -10,9 +10,10 @@ interface InitiativeProps {
   description: string;
   className?: string;
   isParticipant: boolean;
+  onParticipationChange: () => void;
 }
 
-export function InitiativeComponent({ id, title, description, className, isParticipant }: InitiativeProps) {
+export function InitiativeComponent({ id, title, description, className, isParticipant, onParticipationChange }: InitiativeProps) {
   const join = async () => {
     const token = localStorage.getItem("token");
 
@@ -20,12 +21,13 @@ export function InitiativeComponent({ id, title, description, className, isParti
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        "Authorization": `Bearer ${token}`,
       },
       body: JSON.stringify({
         initiativeId: id
       })
     });
+    onParticipationChange();
   };
 
   const leave = async () => {
@@ -35,10 +37,11 @@ export function InitiativeComponent({ id, title, description, className, isParti
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        "Authorization": `Bearer ${token}`,
       },
     });
-  }
+    onParticipationChange();
+  };
 
   return (
     <div className={classNames("border border-gray-300 rounded-lg p-4 bg-white shadow-md", className)}>
@@ -51,7 +54,7 @@ export function InitiativeComponent({ id, title, description, className, isParti
         variant={isParticipant ? "danger" : "primary"}
         label={isParticipant ? "Quitter" : "Rejoindre"}
         className="mt-4"
-        onClick={isParticipant ? () => leave() : () => join()}
+        onClick={isParticipant ? leave : join}
       />
     </div>
   );

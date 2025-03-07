@@ -48,6 +48,8 @@ export function Post(props: PostProps) {
         },
         body: JSON.stringify(formData),
     });
+
+    setModalOpen(false);
   };
 
   const like = () => {};
@@ -174,7 +176,7 @@ export function Post(props: PostProps) {
                 <Button
                   label={"Faire une collab"}
                   variant="primary"
-                  className="!h-8 !py-1"
+                  className="!h-8 !py-1 mt-4 self-center w-80 "
                   onClick={() => setModalOpen(true)}
                 />
               </Stack>
@@ -214,10 +216,16 @@ export function Post(props: PostProps) {
                 </select>
               </div>
               
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Date limite (optionnel)</label>
-                <input type="date" className="w-full border border-gray-300 rounded-md p-2" value={deadline} onChange={(e) => setDeadline(new Date(e.target.value).toISOString())} />
-              </div>
+                          <div>
+              <label className="block text-sm font-medium text-gray-700">Date limite (optionnel)</label>
+              <input
+                type="date"
+                className="w-full border border-gray-300 rounded-md p-2"
+                value={deadline ? new Date(deadline).toISOString().split("T")[0] : ""}
+                onChange={(e) => setDeadline(e.target.value)}
+              />
+            </div>
+
             </form>
             
             <div className="mt-4 flex justify-end gap-2">
