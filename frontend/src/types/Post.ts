@@ -43,6 +43,15 @@ export interface IPost {
   bookmarks: Bookmark[];
 }
 
+export interface NewPost {
+  title: string;
+  imageUrl?: string;
+  problem: string;
+  solution?: string;
+  advice: string;
+  lesson?: string;
+}
+
 export interface Comment {
   id: string;
   content: string;

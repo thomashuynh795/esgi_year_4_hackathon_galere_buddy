@@ -1,4 +1,5 @@
-"use client"
+"use client";
+
 import { Heading } from "@/ui/atoms/Heading/Heading"
 import React from "react"
 import { Text } from "@/ui/atoms/Text/Text";
@@ -8,6 +9,7 @@ import { Avatar } from "@/ui/atoms/Avatar/Avatar";
 import Logo from "@/ui/atoms/Logo/Logo";
 import { POSTS } from "@/constants/sample";
 import { Post } from "@/ui/organisms/Post/Post";
+import { PostGalereTrigger } from "./(components)/PostGalereTrigger";
 
 export default function Dashboard() {
     const posts = POSTS;
@@ -15,42 +17,39 @@ export default function Dashboard() {
     console.log(posts);
     return (
       <div className="w-full">
-
-        <div className="hidden md:inline-block w-full">
+        <div className="hidden md:flex w-full flex-col">
           <div className="p-4">
             <Heading level={4} className={"text-base font-semibold"}>
               Feed
             </Heading>
           </div>
 
-          <Stack direction="col" className="px-4 py-6 border-t-[1px] border-gray-200">
-            <Stack direction="row" align="center" gapx={8}>
+          <Stack
+            direction="row"
+            className="px-4 py-6 border-t-[1px] border-gray-200"
+            align={"start"} justify={"space-between"}
+          >
+            <Stack direction="row" align="start" gapx={8}>
               <Avatar />
               <Stack direction="col" gapx={8}>
                 <Heading level={4} className="text-sm font-medium">
                   Roger Bentcha
                 </Heading>
-                {/* <Text>Developpeur chez</Text> */}
+                <Text className="!text-gray-500">
+                  Qu'est ce qui c'est passé Roger?
+                </Text>
               </Stack>
             </Stack>
 
-            <Stack direction="col">
-              <Text className="my-3 !text-gray-500">
-                Qu'est ce qui c'est passé Roger?
-              </Text>
-              <Button
-                label="Poster une galère"
-                variant={"rounded"}
-                type={"button"}
-              />
-            </Stack>
+
+            <PostGalereTrigger/>
           </Stack>
         </div>
 
         <div className="">
-            {posts.map(post => {
-                return <Post data={post} key={post.id}/>
-            })}
+          {posts.map((post) => {
+            return <Post data={post} key={post.id} />;
+          })}
         </div>
       </div>
     );
